@@ -1,0 +1,72 @@
+{
+    "env": {
+        "es2021": true,
+        "node": true
+    },
+    "extends": [
+        "airbnb-base"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "rules": {
+        // Spacing in brackets is consistent and readable
+        "array-bracket-spacing": [
+            "error",
+            "always"
+        ],
+        // Spacing in brackets is consistent and readable
+        "computed-property-spacing": [
+            "error",
+            "always"
+        ],
+        // Spacing in brackets is consistent and readable
+        "space-in-parens": [
+            "error",
+            "always"
+        ],
+        // Be consistent about where the object braces go
+        "object-curly-newline": [
+            "error",
+            {
+                "consistent": true
+            }
+        ],
+        // There's no need to have more than 1 empty line, ever
+        "no-multiple-empty-lines": [
+            "error",
+            {
+                "max": 1,
+                "maxEOF": 1
+            }
+        ],
+        // No need of semi-colon
+        "semi": "off",
+        // For the few semi-colons required (e.g. inline array operations), place them at the beginning of the statement
+        "semi-style": "off",
+        // This plugin sorts alphabetically by default
+        "simple-import-sort/sort": "off",
+        // Add new line between imports
+        "import/order": [
+            "error",
+            {
+                "newlines-between": "always"
+            }
+        ],
+        // Do not require .js/ts extensions, except for .json
+        "import/extensions": [
+            "error",
+            "never",
+            {
+                "json": "always"
+            }
+        ],
+        // Need console for logging purposes
+        "no-console": "off"
+    }
+}

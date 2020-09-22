@@ -1,0 +1,13 @@
+{
+  "files.autoSave": "onFocusChange",
+  "eslint.run": "onSave",
+  "eslint.format.enable": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.formatOnPaste": true,
+  // https://github.com/microsoft/vscode-eslint/issues/696#issuecomment-537445913
+  "eslint.workingDirectories": [
+    "./backend", 
+    "./frontend"
+  ],
+}

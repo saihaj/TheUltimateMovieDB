@@ -1,0 +1,104 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": [
+    "airbnb",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react",
+    "@typescript-eslint/eslint-plugin"
+  ],
+  "rules": {
+    "react/react-in-jsx-scope": 0,
+    "array-bracket-spacing": [
+      "error",
+      "always"
+    ],
+    "arrow-parens": [
+      "error",
+      "as-needed",
+      {
+        "requireForBlockBody": false
+      }
+    ],
+    "computed-property-spacing": [
+      "error",
+      "always"
+    ],
+    "import/extensions": 0,
+    "import/no-unresolved": 0,
+    "import/prefer-default-export": 0,
+    "linebreak-style": 0,
+    "no-loop-func": 0,
+    "no-restricted-syntax": 0,
+    "no-shadow": 0,
+    "object-curly-newline": [
+      "error",
+      {
+        "consistent": true
+      }
+    ],
+    "react/jsx-filename-extension": 0,
+    "react/state-in-constructor": 0,
+    "react/jsx-props-no-spreading": 0,
+    "react/sort-comp": 0,
+    "react/jsx-one-expression-per-line": 0,
+    "react/require-default-props":0,
+    "semi": [
+      "error",
+      "never"
+    ],
+    "semi-style": [
+      "error",
+      "first"
+    ],
+    "space-in-parens": [
+      "error",
+      "always",
+      {
+        "exceptions": [
+          "empty"
+        ]
+      }
+    ],
+    "no-multiple-empty-lines": [
+      "error", { 
+        "max": 1,
+        "maxEOF": 1
+      }
+    ],
+    "import/no-extraneous-dependencies": [
+      "error", {
+        "devDependencies": true
+        }
+      ],
+      "react/display-name": 0,
+      "react/prop-types": 0,
+      "no-console": [
+        2,
+        {
+          "allow": ["warn", "error"]
+        }
+      ],
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "simple-import-sort/sort": "off",
+    "import/order": [
+        "error",
+        {
+            "newlines-between": "always"
+        }
+    ]
+  }
+}
