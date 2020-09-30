@@ -1,6 +1,7 @@
 module.exports = {
   purge: [
-    './**/*.{ts,tsx}',
+    './**/*.tsx',
+    './**/*.ts',
   ],
   future: {
     removeDeprecatedGapUtilities: true,

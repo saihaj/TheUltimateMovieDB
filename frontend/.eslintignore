@@ -1,2 +1,5 @@
 build/
 serviceWorker.js
+*.md
+.gitignore
+*.css
