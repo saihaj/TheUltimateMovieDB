@@ -67,6 +67,7 @@ This check-in mainly is for setting up things and mocking things. We are design 
   - **Next steps**: We will add "Create account/Login" on top-right if user is not logged in otherwise show an avatar. 
 - `/login`: Login page
   - This is a simple login page that will let users login
+  - Right now, once you fill the form and click login it will just create an Alert and you can see JSON object. This object is what will be used in future to pass to the API.
 - `/register` Register page
   - Asks user for some Personal Information (PI) and then will send it to backend
     - Backend will register the user
