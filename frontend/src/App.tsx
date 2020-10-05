@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react'
 import { Router } from '@reach/router'
 
 const Home = lazy( () => import( './pages/Home' ) )
+const Movies = lazy( () => import( './pages/Movies' ) )
 const NotFound = lazy( () => import( './pages/404' ) )
 
 /**
@@ -11,6 +12,7 @@ const NavigationRoutes = () => (
   <Router>
     <NotFound default />
     <Home path="/" />
+    <Movies path="movies/*" />
   </Router>
 )
 
