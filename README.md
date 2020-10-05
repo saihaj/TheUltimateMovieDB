@@ -57,10 +57,10 @@ As you have seen in [ Project Structure](#project-structure) section we have str
     - To remove unused styles the final build (this helps reduce size for production app) we have `postcss` that runs with the Tailwind compiler in 
   - Since React app is a Single Page Application (SPA) we are using [`@reach/router`](https://reach.tech/router/) to handle routing
   - For simplifying form validation and managing forms we are using Formik and Yup. This helps us to do all sorts of validation on create account / login and in future other pages where we will have user input.
-- Root level of project: We have a top-level `package.json` that uses `npm-run-all` and helps to do some common chores instead of going in to the dir we are working in. The most handy thing is `npm install` in top-level since we download all the dependencies for both `backend` and `frontend` at once. Checkout [Available Scripts section](#available-scripts) or scripts section in `package.json` in root of this project to for more top-level handy scripts.
+- Root level of project: We have a top-level `package.json` that uses `npm-run-all` and helps to do some common chores instead of going in to the directory we are working in. The most handy thing is `npm install` in top-level since we download all the dependencies for both `backend` and `frontend` at once. Checkout [Available Scripts section](#available-scripts) or scripts section in `package.json` in root of this project to for more top-level handy scripts.
 
 #### Frontend
-This check-in mainly is for setting up things and mocking things. We are design with mobile first approach. So most of the pages should look nice on different viewport. Since its not a final product there can be minor issues.  After installing dependencies you can either do `npm run start:frontend` (if on top level) or `npm start` if in frontend dir. It should start a server at `localhost:3000` Following are the pages/routes that you can visit:
+This check-in mainly is for setting up things and mocking things. We are using mobile first approach for designing our web application. So most of the pages should look nice on different viewport. Since its not a final product there can be minor issues.  After installing dependencies you can either do `npm run start:frontend` (if on top level) or `npm start` if in frontend directory. It should start a server at `localhost:3000` Following are the pages/routes that you can visit:
 - `/`: Homepage
   - Inspired from google's design we want anyone who visits our homepage to search (right now search doesn't work). The search will be powered by our backend. We plan to have fuzzy-search implemented and maybe (need to think more on this) implement search for logged in user such a way that results are optimized based on their old likings and previous searches. 
   - Since search functionally relies on our backend mainly so "Search Movie" button right now will take you to 404 page. Ideally it will be similar to `/movies` page
@@ -72,7 +72,7 @@ This check-in mainly is for setting up things and mocking things. We are design 
 - `/register` Register page
   - Asks user for some Personal Information (PI) and then will send it to backend
     - Backend will register the user
-    - once registered they will get logged in automatically on frontend
+    - Once registered they will get logged in automatically on frontend
     - Right now, once you fill the form and click register it will just create an Alert.
     - Similar to Login page you can also pass in url params like `/register?firstName=Tony&lastName=Stark&email=tony@stark.net` it will fill in corresponding fields in the form.
 - `/movies` Movies Listing page
