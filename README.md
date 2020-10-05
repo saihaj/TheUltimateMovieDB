@@ -56,6 +56,7 @@ As you have seen in [ Project Structure](#project-structure) section we have str
   - For styling we are using [TailwindCSS](https://tailwindcss.com)
     - To remove unused styles the final build (this helps reduce size for production app) we have `postcss` that runs with the Tailwind compiler in 
   - Since React app is a Single Page Application (SPA) we are using [`@reach/router`](https://reach.tech/router/) to handle routing
+  - For simplifying form validation and managing forms we are using Formik and Yup. This helps us to do all sorts of validation on create account / login and in future other pages where we will have user input.
 - Root level of project: We have a top-level `package.json` that uses `npm-run-all` and helps to do some common chores instead of going in to the dir we are working in. The most handy thing is `npm install` in top-level since we download all the dependencies for both `backend` and `frontend` at once. Checkout [Available Scripts section](#available-scripts) or scripts section in `package.json` in root of this project to for more top-level handy scripts.
 
 #### Frontend
@@ -70,6 +71,7 @@ This check-in mainly is for setting up things and mocking things. We are design 
   - Asks user for some Personal Information (PI) and then will send it to backend
     - Backend will register the user
     - once registered they will get logged in automatically on frontend
+    - Right now, once you fill the form and click register it will just create an Alert.
 - `/movies` Movies Listing page
   - This uses the `movie-data-short.json` to mock the page.
   - Hovering over the movie card will change border color. In future versions we plan to add `onTap` animations. 
