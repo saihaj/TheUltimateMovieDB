@@ -101,7 +101,7 @@ const Register: FC<PageProps> = () => {
               className={clsx(
                 'mt-2 w-full py-1 font-semibold',
                 'rounded-lg border-2 border-white',
-                'hover:bg-yellow-400 hover:border-yellow-400 hover:text-indigo-700',
+                'hover:bg-yellow-400 hover:border-yellow-400 hover:text-indigo-800',
               )}
             >
               Register
