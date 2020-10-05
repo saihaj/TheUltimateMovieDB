@@ -56,6 +56,7 @@ As you have seen in [ Project Structure](#project-structure) section we have str
   - For styling we are using [TailwindCSS](https://tailwindcss.com)
     - To remove unused styles the final build (this helps reduce size for production app) we have `postcss` that runs with the Tailwind compiler in 
   - Since React app is a Single Page Application (SPA) we are using [`@reach/router`](https://reach.tech/router/) to handle routing
+  - For simplifying form validation and managing forms we are using Formik and Yup. This helps us to do all sorts of validation on create account / login and in future other pages where we will have user input.
 - Root level of project: We have a top-level `package.json` that uses `npm-run-all` and helps to do some common chores instead of going in to the directory we are working in. The most handy thing is `npm install` in top-level since we download all the dependencies for both `backend` and `frontend` at once. Checkout [Available Scripts section](#available-scripts) or scripts section in `package.json` in root of this project to for more top-level handy scripts.
 
 #### Frontend
@@ -66,10 +67,14 @@ This check-in mainly is for setting up things and mocking things. We are using m
   - **Next steps**: We will add "Create account/Login" on top-right if user is not logged in otherwise show an avatar. 
 - `/login`: Login page
   - This is a simple login page that will let users login
+  - If you do `/login?email=dummy@email.com` this will auto fill the email field provided in browser search bar from query params.
+  - Right now, once you fill the form and click login it will just create an Alert and you can see JSON object. This object is what will be used in future to pass to the API.
 - `/register` Register page
   - Asks user for some Personal Information (PI) and then will send it to backend
     - Backend will register the user
     - Once registered they will get logged in automatically on frontend
+    - Right now, once you fill the form and click register it will just create an Alert.
+    - Similar to Login page you can also pass in url params like `/register?firstName=Tony&lastName=Stark&email=tony@stark.net` it will fill in corresponding fields in the form.
 - `/movies` Movies Listing page
   - This uses the `movie-data-short.json` to mock the page.
   - Hovering over the movie card will change border color. In future versions we plan to add `onTap` animations. 

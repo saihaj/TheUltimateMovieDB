@@ -4,6 +4,8 @@ import { Router } from '@reach/router'
 const Home = lazy( () => import( './pages/Home' ) )
 const Movies = lazy( () => import( './pages/Movies' ) )
 const NotFound = lazy( () => import( './pages/404' ) )
+const Register = lazy( () => import( './pages/Register' ) )
+const Login = lazy( () => import( './pages/Login' ) )
 
 /**
  * Setup Top-Level Routes for @reach/router
@@ -13,6 +15,8 @@ const NavigationRoutes = () => (
     <NotFound default />
     <Home path="/" />
     <Movies path="movies/*" />
+    <Register path="register" />
+    <Login path="login" />
   </Router>
 )
 

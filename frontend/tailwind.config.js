@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 module.exports = {
   purge: [
     './**/*.tsx',
@@ -11,5 +12,7 @@ module.exports = {
     extend: {},
   },
   variants: {},
-  plugins: [],
+  plugins: [
+    require( '@tailwindcss/custom-forms' ),
+  ],
 }
