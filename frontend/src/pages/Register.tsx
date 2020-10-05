@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import clsx from 'clsx'
+import { Link } from '@reach/router'
 
 import Layout from '../components/Layout'
 import { PageProps } from '../lib/types'
@@ -108,7 +109,14 @@ const Register: FC<PageProps> = () => {
             </button>
           </div>
 
+          <div className="text-xl pt-2">
+            <Link to="/login" className="hover:text-yellow-400">
+              Already have an account? Login
+            </Link>
+          </div>
+
         </form>
+
       </div>
 
     </Layout>
