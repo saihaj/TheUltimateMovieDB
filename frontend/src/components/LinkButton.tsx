@@ -20,7 +20,7 @@ const NavItem = ( { to, label, customStyles, ...props }: NavItemProps ) => (
     className={cx(
       'bg-gray-400 text-indigo-800',
       'px-4 py-1 rounded-lg',
-      'hover:bg-green-700 hover:text-white',
+      'hover:bg-yellow-400',
       `${customStyles}`,
     )}
     {...props}
