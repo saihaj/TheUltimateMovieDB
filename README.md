@@ -67,12 +67,14 @@ This check-in mainly is for setting up things and mocking things. We are design 
   - **Next steps**: We will add "Create account/Login" on top-right if user is not logged in otherwise show an avatar. 
 - `/login`: Login page
   - This is a simple login page that will let users login
+  - If you do `/login?email=dummy@email.com` this will auto fill the email field provided in browser search bar from query params.
   - Right now, once you fill the form and click login it will just create an Alert and you can see JSON object. This object is what will be used in future to pass to the API.
 - `/register` Register page
   - Asks user for some Personal Information (PI) and then will send it to backend
     - Backend will register the user
     - once registered they will get logged in automatically on frontend
     - Right now, once you fill the form and click register it will just create an Alert.
+    - Similar to Login page you can also pass in url params like `/register?firstName=Tony&lastName=Stark&email=tony@stark.net` it will fill in corresponding fields in the form.
 - `/movies` Movies Listing page
   - This uses the `movie-data-short.json` to mock the page.
   - Hovering over the movie card will change border color. In future versions we plan to add `onTap` animations. 

@@ -6,6 +6,7 @@ import { Link } from '@reach/router'
 
 import Layout from '../components/Layout'
 import { PageProps } from '../lib/types'
+import useQuery from '../hooks/use-query'
 
 const registerFormOptions = [
   { id: 'firstName', type: 'text', placeholder: 'First Name' },
@@ -17,9 +18,9 @@ const registerFormOptions = [
 const Register: FC<PageProps> = () => {
   const formik = useFormik( {
     initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
+      firstName: useQuery( 'firstName' ) || '',
+      lastName: useQuery( 'lastName' ) || '',
+      email: useQuery( 'email' ) || '',
       password: '',
     },
     validationSchema: Yup.object().shape( {
