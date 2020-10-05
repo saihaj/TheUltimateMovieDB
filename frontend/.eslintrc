@@ -55,7 +55,7 @@
     "react/jsx-props-no-spreading": 0,
     "react/sort-comp": 0,
     "react/jsx-one-expression-per-line": 0,
-    "react/require-default-props":0,
+    "react/require-default-props": 0,
     "semi": [
       "error",
       "never"
@@ -74,31 +74,41 @@
       }
     ],
     "no-multiple-empty-lines": [
-      "error", { 
+      "error",
+      {
         "max": 1,
         "maxEOF": 1
       }
     ],
     "import/no-extraneous-dependencies": [
-      "error", {
+      "error",
+      {
         "devDependencies": true
-        }
-      ],
-      "react/display-name": 0,
-      "react/prop-types": 0,
-      "no-console": [
-        2,
-        {
-          "allow": ["warn", "error"]
-        }
-      ],
+      }
+    ],
+    "react/display-name": 0,
+    "react/prop-types": 0,
+    "no-console": [
+      2,
+      {
+        "allow": [
+          "warn",
+          "error"
+        ]
+      }
+    ],
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "simple-import-sort/sort": "off",
     "import/order": [
-        "error",
-        {
-            "newlines-between": "always"
-        }
+      "error",
+      {
+        "newlines-between": "always"
+      }
+    ],
+    // Use type for object definitions
+    "@typescript-eslint/consistent-type-definitions": [
+      "error",
+      "type"
     ]
   }
 }
