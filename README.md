@@ -84,6 +84,13 @@ This check-in mainly is for setting up things and mocking things. We are using m
   - If you give any value `:movieName` it will use the get that parameters from the search bar and display that word on screen.
 - `/profile` User Profile page
   - Users can see and update their profile information on this page.
+  - For now this is just a mock for the page. It includes the following:
+    - Name and profile picture (if available)
+    - Role of user
+    - Recently liked and contributed top 5 table
+      - Clicking a title will in list take you to page of that movie
+    - As we get more what stats we will have. Will add more tables/charts to show that information.
+    - Need to work on editing functionally that will be easily implemented when we start fetching data from our node server.
 
 There are some pages like the Actor/Director profile page that will be easily implemented once we serve content from our Node Server. Since we are currently planning on schema for this that will also work with our GraphQL version of API.
 We will also add a navbar once most of our things start to work together using our API.
