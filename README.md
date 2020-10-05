@@ -1,7 +1,21 @@
 # COMP2406 Movie DB Project
 
+Authors of this project:
+- Co-author: **Saihajpreet Singh** (101150058)
+- Co-author: **Mihir Gupta** (101172281)
+
+Since this top-level README is for describing higher level things for project. We suggest that you also checkout the readme in dirs if you encounter any project specific issues. are some issues when you using them. There shouldn't be any issues since its very simple but who knows. We try to keep notes and important instructions in related dirs to make it easy. We assume that you have working using NodeJS v12.x and NPM installed on your machine.
+
+## Table of Contents
+
+### [COMP2406 Movie DB Project](#comp2406-movie-db-project)
+   - [Project Structure](#project-structure)
+   - [Project Check - in](#project-check---in)
+     - [1 (October 7, 2020)](#1-october-7-2020)
+   - [Available Scripts](#available-scripts)
+
 ## Project Structure
-You can start, install and do other housekeeping stuff from top-level since the `package.json` has all that. But if you are developing please `cd frontend` or `cd backend` into whatever project you are working on. Install projects related deps in those folders.
+You can start, install and do other housekeeping stuff from top-level since the `package.json` has all that. But if you are developing please [`cd frontend`](/frontend/README.md) or [`cd backend`](/backend/README.md) into whatever project you are working on. Install projects related deps in those folders.
 ```
 .
 ├── README.md
@@ -25,11 +39,67 @@ You can start, install and do other housekeeping stuff from top-level since the 
 └── package.json
 ```
 
+## Project Check - in
+
+### #1 (October 7, 2020)
+
+#### A bit about project setup and different things used
+As you have seen in [ Project Structure](#project-structure) section we have structured the project to have following dirs:
+
+- [`backend`](/backend/README.md) which is a NodeJS server that uses ExpressJS and written in `TypeScript`. 
+  - It runs on `localhost:4000` and has a dummy endpoint that returns name of the project. 
+  - We are using a node package `npm-run-all` that makes it easy to run multiple scripts in parallel or in sequence. That is a very handy and useful package since it is important that we can define this order because in `backend` we have to transpile all that TypeScript code to JavaScript.
+  - We are also using `nodemon` to have it restart our node server if any of the source files were changed. It makes development easy.
+- [`frontend`](/frontend/README.md) which uses the following:
+  - `react-scripts` since it is a initialized using [create-react-app](https://create-react-app.dev)
+  - We 💙 typed languages. One of the main reasons is it helps us not do dumb things. That is why we chose to write our React App in TypeScript.
+  - For styling we are using [TailwindCSS](https://tailwindcss.com)
+    - To remove unused styles the final build (this helps reduce size for production app) we have `postcss` that runs with the Tailwind compiler in 
+  - Since React app is a Single Page Application (SPA) we are using [`@reach/router`](https://reach.tech/router/) to handle routing
+- Root level of project: We have a top-level `package.json` that uses `npm-run-all` and helps to do some common chores instead of going in to the dir we are working in. The most handy thing is `npm install` in top-level since we download all the dependencies for both `backend` and `frontend` at once. Checkout [Available Scripts section](#available-scripts) or scripts section in `package.json` in root of this project to for more top-level handy scripts.
+
+#### Frontend
+This check-in mainly is for setting up things and mocking things. We are design with mobile first approach. So most of the pages should look nice on different viewport. Since its not a final product there can be minor issues.  After installing dependencies you can either do `npm run start:frontend` (if on top level) or `npm start` if in frontend dir. It should start a server at `localhost:3000` Following are the pages/routes that you can visit:
+- `/`: Homepage
+  - Inspired from google's design we want anyone who visits our homepage to search (right now search doesn't work). The search will be powered by our backend. We plan to have fuzzy-search implemented and maybe (need to think more on this) implement search for logged in user such a way that results are optimized based on their old likings and previous searches. 
+  - Since search functionally relies on our backend mainly so "Search Movie" button right now will take you to 404 page. Ideally it will be similar to `/movies` page
+  - **Next steps**: We will add "Create account/Login" on top-right if user is not logged in otherwise show an avatar. 
+- `/login`: Login page
+  - This is a simple login page that will let users login
+- `/register` Register page
+  - Asks user for some Personal Information (PI) and then will send it to backend
+    - Backend will register the user
+    - once registered they will get logged in automatically on frontend
+- `/movies` Movies Listing page
+  - This uses the `movie-data-short.json` to mock the page.
+  - Hovering over the movie card will change border color. In future versions we plan to add `onTap` animations. 
+  - Clicking a movies should take you the movie viewer page `/movies/:moviesName`
+- `/movies/:moviesName` Movie Viewer page
+  - This is just an empty page for now.
+  - If you give any value `:movieName` it will use the get that parameters from the search bar and display that word on screen.
+- `/profile` User Profile page
+  - Users can see and update their profile information on this page.
+
+There are some pages like the Actor/Director profile page that will be easily implemented once we serve content from our Node Server. Since we are currently planning on schema for this that will also work with our GraphQL version of API.
+We will also add a navbar once most of our things start to work together using our API.
+
+Not biggies but will probably add them because why not?
+* Footer that has about page link that will show author profiles
+* For User Experience we are planning to add animations will use [`framer-motion`](https://www.framer.com/motion/)
+
+Above and beyond plans (will talk more in future check-in):
+* We are using `React.Suspense` that shows a fallback component if the data is getting fetched. Right now it is `Loading...` we will create skeleton components with loading indicators since it makes good user experience. 
+* Our data fetching solution will implement pre-fetching and caching on client.
+
+#### Developer Things
+- We develop in Visual Studio Code and this comes with all our workspace settings.
+- This project uses ESLint to help us use good practices when we are writing code and avoid issues that are not easily recognized in first review. This also make sure that are styling is consistent.
+
 ## Available Scripts
 `npm run [command]`
 Available Commands
 ```
-dev         Run dev server that will restart automatically 
+dev         Run dev server that will restart automatically (Starts Frontend and Backend)
 build       Create a production builds
 clean       Run clean commands (where applicable)
 start       Run production version of backend and dev for frontend
