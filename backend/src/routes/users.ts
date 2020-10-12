@@ -8,8 +8,8 @@ router.get('/', (_req, res, next) => {
     // next()
 })
 
-router.get('/:UserID', (req, res, next) => {
-    const id = req.params.UserID;
+router.get('/:UserID', (_req, res, next) => {
+    const id = _req.params.UserID;
     if (id === 'special') {
         res.status(200).json({
             message: 'You have discovered the special ID',
