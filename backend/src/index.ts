@@ -2,6 +2,8 @@ import express from 'express'
 import morgan from 'morgan'
 import helmet from 'helmet'
 
+import users from './routes/users'
+
 const app = express()
 
 // Middlewares
@@ -22,6 +24,8 @@ app.get( '/', ( _req, res ) => {
     name: 'The Ultimate MovieDB',
   } )
 } )
+
+app.use( '/users', users )
 
 // Server
 app.listen( 4000, () => {
