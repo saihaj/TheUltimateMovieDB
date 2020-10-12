@@ -1,26 +1,25 @@
-import express from 'express'
+import { Router } from 'express'
 
-const router = express()
-router.get('/', (_req, res, next) => {
-    res.status(200).json({
-        message: 'Handling GET requests to /users'
-    })
-    // next()
-})
+const router = Router()
 
-router.get('/:UserID', (_req, res, next) => {
-    const id = _req.params.UserID;
-    if (id === 'special') {
-        res.status(200).json({
-            message: 'You have discovered the special ID',
-            id: id
-        });
-    }
-    else {
-        res.status(200).json({
-            message: 'you passed an ID'
-        });
-    }
-})
+router.get( '/', ( _, res ) => {
+  res.status( 200 ).json( {
+    message: 'Handling GET requests to /users',
+  } )
+} )
 
-module.exports = router
+router.get( '/:UserID', ( req, res ) => {
+  const id = req.params.UserID;
+  if ( id === 'special' ) {
+    res.status( 200 ).json( {
+      message: 'You have discovered the special ID',
+      id,
+    } );
+  } else {
+    res.status( 200 ).json( {
+      message: 'you passed an ID',
+    } );
+  }
+} )
+
+export default router
