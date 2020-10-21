@@ -1,18 +1,23 @@
 /* Visit https://aka.ms/tsconfig.json to read more about this file */
 {
-    "compilerOptions": {
-      "incremental": true,
-      "noEmit": false,
-      "target": "ES6",
-      "module": "commonjs",
-      "rootDir": "src",
-      "outDir": "dist",
-      "removeComments": true,
-      "strict": true,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true
-    },
-    "exclude": [ "node_modules" ],
-    "include": [ "src/**/*.ts" ]
-  }
+  "compilerOptions": {
+    "incremental": true,
+    "noEmit": false,
+    "target": "ES6",
+    "module": "commonjs",
+    "rootDir": "src",
+    "outDir": "dist",
+    "removeComments": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "src/**/*.ts"
+  ]
+}

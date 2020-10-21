@@ -13,6 +13,11 @@
     "plugins": [
         "@typescript-eslint"
     ],
+    "settings": {
+        "import/resolver": {
+            "typescript": {}
+        }
+    },
     "rules": {
         // Spacing in brackets is consistent and readable
         "array-bracket-spacing": [
