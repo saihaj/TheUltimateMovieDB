@@ -1,14 +1,16 @@
 import express from 'express'
 import morgan from 'morgan'
 import helmet from 'helmet'
+import bodyParser from 'body-parser'
 
-import users from './routes/users'
+import { Users, Movies, People } from './routes'
 
 const app = express()
 
 // Middlewares
 app.use( morgan( 'dev' ) ) // Deprecation warning is because of https://github.com/expressjs/morgan/issues/190
 app.use( helmet() )
+app.use( bodyParser() )
 
 // CORS middleware
 app.use( ( _req, res, next ) => {
@@ -25,7 +27,9 @@ app.get( '/', ( _req, res ) => {
   } )
 } )
 
-app.use( '/users', users )
+app.use( '/users', Users )
+app.use( '/movies', Movies )
+app.use ('/people', People )
 
 // Server
 app.listen( 4000, () => {
