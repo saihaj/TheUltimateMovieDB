@@ -12,6 +12,7 @@ Since this top-level README is for describing higher level things for project. W
    - [Project Structure](#project-structure)
    - [Project Check - in](#project-check---in)
      - [1 (October 7, 2020)](#1-october-7-2020)
+     - [2 (October 27, 2020)](#2-october-27-2020)
    - [Available Scripts](#available-scripts)
 
 ## Project Structure
@@ -106,6 +107,19 @@ Above and beyond plans (will talk more in future check-in):
 #### Developer Things
 - We develop in Visual Studio Code and this comes with all our workspace settings.
 - This project uses ESLint to help us use good practices when we are writing code and avoid issues that are not easily recognized in first review. This also make sure that are styling is consistent.
+
+### #2 (October 27, 2020)
+In this check-in we worked on getting up the endpoints ready for are node server. We then use the API to consume the data in our [`frontend`](frontend/README.md).
+
+#### Backend
+We have implemented the endpoints required by [project requirements](requirements.pdf) with some additions which were needed to fulfill our data needs. After installing dependencies you can either do `npm run start:backend` (if on top level) or `npm start` if in backend directory. It should start a server at `localhost:4000`. Please checkout the [README in `backend`](backend/README.md) directory for detailed documentation of supported endpoints by our nodeJS server written in TypeScript.
+
+#### Database
+Based on requirements we have designed the following schema for our backend. This design helps us design endpoints and [initialization scripts](#initialization-scripts).
+![image](db.png)
+
+#### Initialization Scripts
+This is work in progress and it will probably change. Idea is to read the [`dataset files provided`](dataset/README.txt) and batch them in format that will follow the [schema for our database](db.png).
 
 ## Available Scripts
 `npm run [command]`
