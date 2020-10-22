@@ -109,10 +109,10 @@ Above and beyond plans (will talk more in future check-in):
 - This project uses ESLint to help us use good practices when we are writing code and avoid issues that are not easily recognized in first review. This also make sure that are styling is consistent.
 
 ### #2 (October 27, 2020)
-In this check-in we worked on getting up the endpoints ready for are node server. We then use the API to consume the data in our [`frontend`](frontend/README.md).
+In this check-in we worked on getting up the endpoints ready for are node server. In check-in one all the data was done client side. But in this check-in we use the API to consume the data in our [`frontend`](frontend/README.md). Since we move our data fetching to our API. To see this in action please use the `npm start` command on top-level of this project. It will take care of all build steps and will start both frontend http://localhost:3000 and backend at http://localhost:4000. For more details please read the whole document. 
 
 #### Backend
-We have implemented the endpoints required by [project requirements](requirements.pdf) with some additions which were needed to fulfill our data needs. After installing dependencies you can either do `npm run start:backend` (if on top level) or `npm start` if in backend directory. It should start a server at `localhost:4000`. Please checkout the [README in `backend`](backend/README.md) directory for detailed documentation of supported endpoints by our nodeJS server written in TypeScript.
+We have implemented few of the endpoints required by [project requirements](requirements.pdf) and some additions which were needed to fulfill our data needs. To just run the backend, after installing dependencies you can either do `npm run start:backend` (if on top level) or `npm start` if in backend directory. It should start a server at `localhost:4000`. Please checkout the [README in `backend`](backend/README.md#endpoints) directory for detailed documentation of supported endpoints by our nodeJS server written in TypeScript.
 
 #### Database
 Based on requirements we have designed the following schema for our backend. This design helps us design endpoints and [initialization scripts](#initialization-scripts).
