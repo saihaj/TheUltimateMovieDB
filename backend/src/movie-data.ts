@@ -2,6 +2,7 @@
 /* eslint-disable */
 const MOVIES = [
   {
+    "id": "1",
     "Title": "Toy Story",
     "Year": "1995",
     "Rated": "G",
@@ -42,6 +43,7 @@ const MOVIES = [
     "Response": "True"
   },
   {
+    "id": "2",
     "Title": "Jumanji",
     "Year": "1995",
     "Rated": "PG",
@@ -82,6 +84,7 @@ const MOVIES = [
     "Response": "True"
   },
   {
+    "id": "3",
     "Title": "Grumpier Old Men",
     "Year": "1995",
     "Rated": "PG-13",
@@ -122,6 +125,7 @@ const MOVIES = [
     "Response": "True"
   },
   {
+    "id": "4",
     "Title": "Waiting to Exhale",
     "Year": "1995",
     "Rated": "R",
@@ -158,6 +162,7 @@ const MOVIES = [
     "Response": "True"
   },
   {
+    "id": "5",
     "Title": "Father of the Bride Part II",
     "Year": "1995",
     "Rated": "PG",
@@ -198,6 +203,7 @@ const MOVIES = [
     "Response": "True"
   },
   {
+    "id": "6",
     "Title": "Heat",
     "Year": "1995",
     "Rated": "R",
@@ -238,6 +244,7 @@ const MOVIES = [
     "Response": "True"
   },
   {
+    "id": "7",
     "Title": "Sabrina",
     "Year": "1995",
     "Rated": "PG",
@@ -278,6 +285,7 @@ const MOVIES = [
     "Response": "True"
   },
   {
+    "id": "8",
     "Title": "Tom and Huck",
     "Year": "1995",
     "Rated": "PG",
@@ -314,6 +322,7 @@ const MOVIES = [
     "Response": "True"
   },
   {
+    "id": "9",
     "Title": "Sudden Death",
     "Year": "1995",
     "Rated": "R",
@@ -350,6 +359,7 @@ const MOVIES = [
     "Response": "True"
   },
   {
+    "id": "10",
     "Title": "GoldenEye",
     "Year": "1995",
     "Rated": "PG-13",
