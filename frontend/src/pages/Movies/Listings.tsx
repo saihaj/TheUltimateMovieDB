@@ -21,12 +21,22 @@ type MovieCardProps = {
   director: string
   releaseDate: string
   rated: string
+  movieId: string
 }
 
-const MovieCard = ( { title, posterUrl, director, releaseDate, rated }: MovieCardProps ) => (
+const MovieCard = (
+  {
+    movieId,
+    title,
+    posterUrl,
+    director,
+    releaseDate,
+    rated,
+  }: MovieCardProps,
+) => (
   <div className="p-2 md:w-1/3">
 
-    <Link to={title}>
+    <Link to={movieId}>
 
       <div
         className={cx(
@@ -80,16 +90,17 @@ const Listings: FC<PageProps> = () => {
       {data && (
       <div className="md:flex md:flex-wrap">
         {/* @ts-ignore */}
-        {data.map( ( { title, poster, id, director, released, rated } ) => (
-          <MovieCard
-            key={id}
-            title={title}
-            posterUrl={poster}
-            director={director}
-            releaseDate={released}
-            rated={rated}
-          />
-        ) )}
+          {data.map( ( { title, poster, id, director, released, rated } ) => (
+            <MovieCard
+              key={id}
+              movieId={id}
+              title={title}
+              posterUrl={poster}
+              director={director}
+              releaseDate={released}
+              rated={rated}
+            />
+          ) )}
       </div>
       )}
 
