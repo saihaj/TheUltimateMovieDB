@@ -18,7 +18,7 @@ NOTE: Currently we are just using the [`movie-data-short.json`](../dataset/movie
 ### GET
 - `users`
   - Following fields should be returned by all endpoints in this route. Check for exceptions or additional fields for that route.
-    - `_id`
+    - `id`
     - `name`
     - `role`
   - `/`
@@ -28,6 +28,7 @@ NOTE: Currently we are just using the [`movie-data-short.json`](../dataset/movie
 
 - `movies`
   - Following fields should be returned by all endpoints in this route. Check for exceptions or additional fields for that route.
+    - `id`
     - `title`
     - `genre`
     - `actors`
@@ -55,8 +56,3 @@ NOTE: Currently we are just using the [`movie-data-short.json`](../dataset/movie
       - `poster`
       - `rated`
       - `released`
-
-### UPDATE
-- `users`
-  - `/:user/role`
-    - Switches the role of user and returns `user` object.
