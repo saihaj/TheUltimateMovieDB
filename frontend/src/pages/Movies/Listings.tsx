@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 import { Link } from '@reach/router'
 import cx from 'clsx'
+import useSwr from 'swr'
 
-import temp from '../../movie-data-short.json'
 import { PageProps } from '../../lib/types'
 import Layout from '../../components/Layout'
 
@@ -69,21 +69,32 @@ const MovieCard = ( { title, posterUrl, director, releaseDate, rated }: MovieCar
   </div>
 )
 
-const Listings: FC<PageProps> = () => (
-  <Layout>
-    <div className="md:flex md:flex-wrap">
-      {temp.map( ( { Title, Poster, imdbID, Director, Released, Rated } ) => (
-        <MovieCard
-          key={imdbID}
-          title={Title}
-          posterUrl={Poster}
-          director={Director}
-          releaseDate={Released}
-          rated={Rated}
-        />
-      ) )}
-    </div>
-  </Layout>
-)
+const Listings: FC<PageProps> = () => {
+  const { data, error } = useSwr( '/api/movies' )
+
+  return (
+    <Layout>
+      {!error && !data && <div>Loading...</div>}
+      {error && <h1 className="text-center text-3xl pt-16">We have a problem!</h1>}
+
+      {data && (
+      <div className="md:flex md:flex-wrap">
+        {/* @ts-ignore */}
+        {data.map( ( { title, poster, id, director, released, rated } ) => (
+          <MovieCard
+            key={id}
+            title={title}
+            posterUrl={poster}
+            director={director}
+            releaseDate={released}
+            rated={rated}
+          />
+        ) )}
+      </div>
+      )}
+
+    </Layout>
+  )
+}
 
 export default Listings
