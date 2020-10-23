@@ -119,7 +119,15 @@ We have added `morgan` for logging. This allows us to debug and see all the requ
 ### Frontend
 In previous check-in all the data was handled on client side. We were reading the [`dataset`](dataset/movie-data-short.json) on client to show data. But now we are using our API to fetch the data needs for the client. We are doing client side data fetching (aka Ajax) to get content to our pages. 
 
-The major change we have made from our initial routing on client to now is that we use the UUID for movie instead ot the title of the movie in the page. Since our backend endpoint only supports (for now) supports getting by movie ID.  
+The major change we have made from our initial routing on client to now is that we use the UUID instead of taking in a string like title of the movie. Since our backend endpoint only supports (for now) getting something by ID we have changed the router so that we can use the URL params to make API requests to our backend and get the data.
+
+NOTE: The below routes only outlines the breaking changes from previous check-in.
+
+- `/profile` All User Profile page
+  - You can see profile cards of all different users currently registered.
+  - Clicking a user card will take you to the user profile page.
+- `/profile/:userId` Profile of a specific user
+  - This is similar to the old `/profile` route as described in [check-in 1](#1-october-7-2020)
 
 #### Database
 Based on requirements we have designed the following schema for our backend. This design helps us design endpoints and [initialization scripts](#initialization-scripts).
