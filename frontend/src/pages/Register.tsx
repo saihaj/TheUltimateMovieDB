@@ -41,8 +41,24 @@ const Register: FC<PageProps> = () => {
         .matches( /^[a-zA-Z0-9]+$/, 'Password must be alpha numeric and contain Latin letters.' )
         .required( 'Password is required' ),
     } ),
-    onSubmit: values => {
-      alert( JSON.stringify( values, null, 2 ) )
+    onSubmit: async values => {
+      const response = await fetch( '/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify( {
+          name: `${values.firstName} ${values.lastName}`,
+          role: 'Regular',
+        } ),
+      } )
+
+      // If all good take to all users page
+      if ( response.status === 200 ) {
+        window.location.replace( '/profile' )
+      } else {
+        alert( 'Something went wrong!!!' )
+      }
     },
   } )
 
