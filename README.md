@@ -116,6 +116,11 @@ We have implemented few of the endpoints required by [project requirements](requ
 
 We have added `morgan` for logging. This allows us to debug and see all the requests made to our API.
 
+### Frontend
+In previous check-in all the data was handled on client side. We were reading the [`dataset`](dataset/movie-data-short.json) on client to show data. But now we are using our API to fetch the data needs for the client. We are doing client side data fetching (aka Ajax) to get content to our pages. 
+
+The major change we have made from our initial routing on client to now is that we use the UUID for movie instead ot the title of the movie in the page. Since our backend endpoint only supports (for now) supports getting by movie ID.  
+
 #### Database
 Based on requirements we have designed the following schema for our backend. This design helps us design endpoints and [initialization scripts](#initialization-scripts).
 ![image](db.png)
