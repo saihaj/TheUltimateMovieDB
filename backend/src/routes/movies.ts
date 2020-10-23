@@ -1,8 +1,12 @@
 import { Router } from 'express'
+import { v4 } from 'uuid'
+import { pick } from 'lodash'
 
 import dataset from '../movie-data'
 
 const router = Router()
+
+const returnItems = [ 'id', 'title', 'genre', 'director', 'actors', 'writer', 'poster', 'rated', 'released' ]
 
 /**
  * Get all movies
@@ -14,7 +18,11 @@ const router = Router()
  *   - minrating
  */
 router.get( '/', ( _, res ) => {
-  res.json( dataset )
+  const temp:any = []
+
+  dataset.forEach( ( a ) => temp.push( pick( a, returnItems ) ) )
+
+  res.json( temp )
 } )
 
 /**
@@ -23,23 +31,28 @@ router.get( '/', ( _, res ) => {
  *   - title
  *   - genre
  *   - year
- *   - year
  *   - actors
  *   - writer
  *   - director
- *   - ratings
- *   - reviews
+ *   - poster
+ *   - rated
+ *   - released
  */
 router.get( '/:movie', ( { params: { movie } }, res ) => {
-  console.log( movie )
-  res.json( movie )
+  const currentMov = dataset.find( ( { id } ) => id === movie )
+
+  if ( currentMov === undefined ) {
+    res.status( 404 ).json( { error: 'Could not find the requested movie' } )
+  }
+
+  res.json( pick( currentMov, returnItems ) )
 } )
 
 // Post a movie
-router.post( '/', ( { params }, res ) => {
-  const test = { ...params }
-  console.log( test )
-  res.json( test )
+router.post( '/', ( { body }, res ) => {
+  const input = { id: v4(), ...body }
+  dataset.push( input )
+  res.status( 200 ).json( { message: 'Successfully added the movie' } )
 } )
 
 export default router

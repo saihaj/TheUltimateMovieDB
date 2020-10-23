@@ -114,12 +114,17 @@ In this check-in we worked on getting up the endpoints ready for are node server
 #### Backend
 We have implemented few of the endpoints required by [project requirements](requirements.pdf) and some additions which were needed to fulfill our data needs. To just run the backend, after installing dependencies you can either do `npm run start:backend` (if on top level) or `npm start` if in backend directory. It should start a server at `localhost:4000`. Please checkout the [README in `backend`](backend/README.md#endpoints) directory for detailed documentation of supported endpoints by our nodeJS server written in TypeScript.
 
+We have added `morgan` for logging. This allows us to debug and see all the requests made to our API.
+
 #### Database
 Based on requirements we have designed the following schema for our backend. This design helps us design endpoints and [initialization scripts](#initialization-scripts).
 ![image](db.png)
 
 #### Initialization Scripts
 This is work in progress and it will probably change. Idea is to read the [`dataset files provided`](dataset/README.txt) and batch them in format that will follow the [schema for our database](db.png).
+
+There are many things that we need to work on. Some of improvements we would like to add in next check-in:
+- Error Checking for API - Currently we did not spend too much time since validation and all are easily taken care when our mongo is initialized properly.
 
 ## Available Scripts
 `npm run [command]`

@@ -13,6 +13,8 @@ start       Run clean, build and then start the server
 
 ## Endpoints
 
+NOTE: Currently we are just using the [`movie-data-short.json`](../dataset/movie-data-short.json) for data.
+
 ### GET
 - `users`
   - Following fields should be returned by all endpoints in this route. Check for exceptions or additional fields for that route.
@@ -31,8 +33,10 @@ start       Run clean, build and then start the server
     - `actors`
     - `writer`
     - `director`
-    - `ratings`
-    - `reviews`
+    - `year`
+    - `poster`
+    - `rated`
+    - `released`
   - `/`
     - Returns an array of all movies
   - `/:movie`
@@ -41,14 +45,16 @@ start       Run clean, build and then start the server
 ### POST
 - `movies`
   - `/`
-    - Returns a boolean value. You must specify the following fields.
+    - Returns a success message. You must specify the following fields.
       - `title`
       - `genre`
       - `actors`
       - `writer`
       - `director`
-      - `ratings`
-      - `reviews`
+      - `year`
+      - `poster`
+      - `rated`
+      - `released`
 
 ### UPDATE
 - `users`
