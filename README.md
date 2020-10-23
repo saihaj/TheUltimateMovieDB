@@ -116,7 +116,7 @@ We have implemented few of the endpoints required by [project requirements](requ
 
 We have added `morgan` for logging. This allows us to debug and see all the requests made to our API.
 
-### Frontend
+#### Frontend
 In previous check-in all the data was handled on client side. We were reading the [`dataset`](dataset/movie-data-short.json) on client to show data. But now we are using our API to fetch the data needs for the client. We are doing client side data fetching (aka Ajax) to get content to our pages. 
 
 The major change we have made from our initial routing on client to now is that we use the UUID instead of taking in a string like title of the movie. Since our backend endpoint only supports (for now) getting something by ID we have changed the router so that we can use the URL params to make API requests to our backend and get the data.
@@ -134,7 +134,9 @@ Based on requirements we have designed the following schema for our backend. Thi
 ![image](db.png)
 
 #### Initialization Scripts
-This is work in progress and it will probably change. Idea is to read the [`dataset files provided`](dataset/README.txt) and batch them in format that will follow the [schema for our database](db.png).
+This is work in progress and it will probably change. Idea is to read the [`dataset files provided`](dataset/README.txt) and batch them in format that will follow the [schema for our database](db.png). You can try these scripts out `cd backend && npm run db`. This is just prototyping stage so we print to the console with the small dataset provided. Right now we read the data set and make object as shown in "People" collection of our DB schema.
+
+Right now our scripts are not the most efficient. Reason is that we are iterating over the dataset and filtering out the key we want and then store that info in temporary object and then push that object to array. Each time we run our function it gets expensive. Since this all is done once and not matter much but this is something we are still thinking on how to implement in a way that doesn't take too long when initialling. 
 
 There are many things that we need to work on. Some of improvements we would like to add in next check-in:
 - Error Checking for API - Currently we did not spend too much time since validation and all are easily taken care when our mongo is initialized properly.
