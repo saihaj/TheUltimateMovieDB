@@ -42,7 +42,7 @@ router.get( '/:movie', ( { params: { movie } }, res ) => {
   const currentMov = dataset.find( ( { id } ) => id === movie )
 
   if ( currentMov === undefined ) {
-    res.status( 404 ).json( { error: 'Could not find the requested movie' } )
+    res.status( 404 )
   }
 
   res.json( pick( currentMov, returnItems ) )

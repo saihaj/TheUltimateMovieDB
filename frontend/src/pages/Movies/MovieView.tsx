@@ -11,13 +11,7 @@ type MovieComponentProps = {
   director: string
 }
 
-const MovieComponent = (
-  {
-    title,
-    posterUrl,
-    director,
-  }: MovieComponentProps,
-) => (
+const MovieComponent = ( { title, posterUrl, director }: MovieComponentProps ) => (
   <div className="md:flex md:justify-around">
     <img
       alt={`Posted of ${title}`}
@@ -37,11 +31,17 @@ const MovieView: FC<PageProps> = () => {
 
   return (
     <Layout>
-      <div className="max-w-2xl mx-auto pt-32">
-        {!error && !data && <div>Loading...</div>}
-        {error && <h1 className="text-center text-3xl pt-16">We have a problem!</h1>}
-        {data && <MovieComponent title={data.title} posterUrl={data.poster} director={data.director} />}
-      </div>
+      {!error && !data && <div>Loading...</div>}
+      {error && <h1 className="text-center text-3xl pt-16">We have a problem! Movie not found</h1>}
+      {data && (
+        <div className="max-w-2xl mx-auto pt-32">
+          <MovieComponent
+            title={data.title}
+            posterUrl={data.poster}
+            director={data.director}
+          />
+        </div>
+      )}
     </Layout>
   )
 }

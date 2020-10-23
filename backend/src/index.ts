@@ -29,7 +29,7 @@ app.get( '/', ( _req, res ) => {
 
 app.use( '/users', Users )
 app.use( '/movies', Movies )
-app.use ('/people', People )
+app.use( '/people', People )
 
 // Server
 app.listen( 4000, () => {
