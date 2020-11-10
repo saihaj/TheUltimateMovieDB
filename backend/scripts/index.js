@@ -2,6 +2,7 @@
 import data from "./movie-data"
 import { camelCase } from "lodash"
 import fs from "fs"
+import { v4 } from "uuid"
 
 // Check `db.png` for different keys
 const movieCollectionKeys = [
@@ -30,33 +31,47 @@ const StripParens = (word) => {
   return word.split("(")[0].trim()
 }
 
-const setObj = (list, filterKey) => {
+const peopleKeys = ["writer", "director", "actor"]
+
+const setObj = (list, filterKeys) => {
   data.map((obj) => {
     Object.keys(obj)
-      .filter((key) => key === filterKey)
+      .filter((key) => filterKeys.includes(key))
       .forEach((key) => {
+        let temp = { id: v4() }
         List(obj[key])
           .map((a) => StripParens(a))
           .forEach((name) => {
-            list.push({
-              name: name,
-              role: filterKey,
-            })
+            let updateIndex = null
+            list.map((a, i) => (a.name === name ? (updateIndex = i) : null))
+            if (updateIndex == null) {
+              temp = {
+                ...temp,
+                name: name,
+                role: {
+                  ...temp.role,
+                  [key]: [obj["id"]],
+                },
+              }
+            } else {
+              list[updateIndex] = {
+                ...list[updateIndex],
+                role: {
+                  ...list[updateIndex].role,
+                  [key]: [obj["id"]],
+                },
+              }
+            }
           })
+
+        list.push(temp)
       })
   })
 }
 
-// const writersList = []
-// // const actorsList = []
-// setObj(writersList, "writer")
-// // setObj(actorsList, 'actors')
-
-// console.log("List of writers object")
-// console.log(writersList)
-
-// console.log("\nList of actors object")
-// console.log(actorsList)
+const peopleList = []
+setObj(peopleList, peopleKeys)
+// peopleList.map((a) => console.log(a))
 
 const includeInMovieCollection = [
   "id",
@@ -138,6 +153,10 @@ const topLevelClean = (list, topLevelFilters, metaDataFilters) => {
         }
       })
 
+    temp = {
+      ...temp,
+      id: v4(),
+    }
     list.push(temp)
   })
 }
