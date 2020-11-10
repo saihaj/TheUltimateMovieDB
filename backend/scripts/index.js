@@ -137,6 +137,13 @@ const topLevelClean = (list, topLevelFilters, metaDataFilters) => {
               ...imdbTemp,
             },
           }
+        }
+        // should be an array
+        else if (["genre"].includes(key)) {
+          temp = {
+            ...temp,
+            [camelCase(key)]: List(obj[key]),
+          }
         } else {
           movieMetaTemp = {
             ...movieMetaTemp,
