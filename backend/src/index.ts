@@ -1,8 +1,9 @@
 import express, { json } from 'express'
 import morgan from 'morgan'
 import helmet from 'helmet'
+import express from 'express'
 
-import { Users, Movies, People } from './routes'
+import apiRoutes from './routes'
 
 const app = express()
 
@@ -19,16 +20,7 @@ app.use( ( _req, res, next ) => {
   next()
 } )
 
-// Routes
-app.get( '/', ( _req, res ) => {
-  res.json( {
-    name: 'The Ultimate MovieDB',
-  } )
-} )
-
-app.use( '/users', Users )
-app.use( '/movies', Movies )
-app.use( '/people', People )
+app.use( apiRoutes )
 
 // Server
 app.listen( 4000, () => {
