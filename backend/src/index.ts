@@ -9,7 +9,7 @@ const app = express()
 const startServer = async () => {
   // Connect to DB
   try {
-    await mongoose.connect( 'mongodb://root:toor@localhost:27017' )
+    await mongoose.connect( 'mongodb://root:toor@localhost:27017', { useNewUrlParser: true } )
     console.log( 'Connected to MongoDB' )
   } catch ( err ) {
     console.log( err )

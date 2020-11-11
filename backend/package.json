@@ -23,6 +23,7 @@
     "helmet": "^4.1.1",
     "lodash": "^4.17.20",
     "mongoose": "^5.10.13",
+    "mongoose-type-email": "^1.0.13",
     "morgan": "^1.10.0",
     "uuid": "^8.3.1"
   },
