@@ -9,4 +9,9 @@
     "./backend", 
     "./frontend"
   ],
+  "conventionalCommits.scopes": [
+    "backend",
+    "frontend",
+    "docs"
+  ],
 }
