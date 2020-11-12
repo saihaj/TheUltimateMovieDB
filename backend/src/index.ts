@@ -20,6 +20,26 @@ const startServer = async () => {
   app.use( middleware )
   app.use( apiRoutes )
 
+  // 404 errors
+  app.use( ( _res, _req, next ) => {
+    const error = new Error( 'Not found' );
+    // @ts-expect-error
+    error.status = 404;
+    next( error );
+  } );
+
+  // Error handler (all errors are passed to this)
+  // @ts-expect-error
+  app.use( ( { message, status }, { method, path }, res, next ) => {
+    const errorCode = status || 500
+    res.status( errorCode ).json( {
+      error: errorCode,
+      request: { method, path },
+      message,
+    } );
+    next();
+  } );
+
   // Server
   app.listen( 4000, () => {
     console.log( 'Server ready at http://localhost:4000/' )
