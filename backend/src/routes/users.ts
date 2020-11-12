@@ -1,55 +1,56 @@
 import { Router } from 'express'
-import { v4 } from 'uuid'
+import bcrypt from 'bcryptjs'
+import { omit } from 'lodash'
+
+import Models from '../models'
+import { DnE, GetItemById, GetAll } from '../utils/db'
 
 const router = Router()
 
-const users = [
-  {
-    id: '1',
-    name: 'Rick Sanchez',
-    role: 'Contributor',
-  },
-  {
-    id: '2',
-    name: 'Bob',
-    role: 'Contributor',
-  },
-  {
-    id: '3',
-    name: 'Tom Cruise',
-    role: 'Contributor',
-  },
-  {
-    id: '4',
-    name: 'Jimmy Fallen',
-    role: 'Contributor',
-  },
-]
-
 /**
  * Get all users
- * Search params supported:
- *  - name
  */
-router.get( '/', ( _, res ) => {
-  res.json( users )
+router.get( '/', async ( _, res, next ) => {
+  try {
+    const users = await GetAll( Models.User )
+    return res.json( users );
+  } catch ( err ) { return next( err ) }
 } )
 
 // Get user by ID
-router.get( '/:user', ( { params: { user } }, res ) => {
-  const currentUser = users.find( ( { id } ) => id === user )
-
-  if ( currentUser === undefined ) {
-    res.status( 404 )
-  }
-
-  res.json( currentUser )
+router.get( '/:userId', async ( { params: { userId } }, res, next ) => {
+  try {
+    const user = await GetItemById( Models.User, userId )
+    if ( user ) return res.json( user )
+    return next( DnE( userId ) )
+  } catch ( err ) { return next( err ) }
 } )
 
-// Add a user
-router.post( '/', ( { body }, res ) => {
-  users.push( { id: v4(), ...body } )
-  res.status( 200 ).json( { message: 'Successfully added the user' } )
+/**
+ * Add a user
+ * Provide
+ *   - name: string
+ *   - email: string
+ *   - password: string
+ *   - role?: ['regular','contributing']
+ *   - moviesHated?: [{ count?: number, movies?: Movie ObjectId }]
+ *   - moviesLoved?: [{ count?: number, movies?: Movie ObjectId }]
+ */
+router.post( '/', async ( { body }, res, next ) => {
+  try {
+    const hashedPassword = await bcrypt.hash( body.password, 10 )
+
+    const user = new Models.User( {
+      ...body,
+      password: hashedPassword,
+    } );
+
+    const saveUser = await user.save()
+
+    return res.json( {
+      ...omit( saveUser.toJSON(), [ 'password', '__v' ] ),
+    } )
+  } catch ( err ) { return next( err ) }
 } )
 
 export default router

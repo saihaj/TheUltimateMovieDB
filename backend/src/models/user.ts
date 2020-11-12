@@ -4,8 +4,11 @@ import 'mongoose-type-email'
 import { ObjectReference } from '../utils/db'
 
 const MovieReactionType = {
-  count: Number,
-  movies: ObjectReference( 'Movie' ),
+  count: {
+    type: Number,
+    required: false,
+  },
+  movies: ObjectReference( 'Movie', false ),
 }
 
 const UserSchema = new Schema( {
@@ -29,8 +32,8 @@ const UserSchema = new Schema( {
     type: String,
     required: true,
   },
-  moviesLoved: MovieReactionType,
-  moviesHates: MovieReactionType,
+  moviesLoved: [ MovieReactionType ],
+  moviesHates: [ MovieReactionType ],
 } )
 
 export default model( 'User', UserSchema )
