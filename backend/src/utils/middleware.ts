@@ -1,12 +1,14 @@
 import { Router, json } from 'express'
 import morgan from 'morgan'
 import helmet from 'helmet'
+import cookieParser from 'cookie-parser'
 
 const routes = Router()
 
 routes.use( morgan( 'dev' ) ) // Deprecation warning is because of https://github.com/expressjs/morgan/issues/190
 routes.use( helmet() )
 routes.use( json() )
+routes.use( cookieParser() )
 
 // CORS middleware
 routes.use( ( _req, res, next ) => {
