@@ -4,6 +4,8 @@ import { omit } from 'lodash'
 
 import Models from '../models'
 import { DnE, GetItemById, GetAll } from '../utils/db'
+import { createToken } from '../utils/auth'
+import { JWT_SECRET, REFRESH_TOKEN_EXPIRY } from '../utils/consts'
 
 const router = Router()
 
@@ -51,6 +53,38 @@ router.post( '/', async ( { body }, res, next ) => {
       ...omit( saveUser.toJSON(), [ 'password', '__v' ] ),
     } )
   } catch ( err ) { return next( err ) }
+} )
+
+router.post( '/login', async ( { body }, res, next ) => {
+  try {
+    const { email } = body
+    if ( !body.email || !body.password ) return next( { message: 'Missing email/password field', status: 400 } )
+
+    // Grab user from DB
+    const retrievedUser = await Models.User.findOne( { email } ).populate( 'user' )
+    if ( !retrievedUser ) return next( { message: 'User does not exist', status: 404 } )
+
+    // @ts-expect-error
+    const { name, _id: id, role, password: hashedPassword } = retrievedUser
+
+    // Compare passwords
+    const checkPassword = await bcrypt.compare( body.password, hashedPassword )
+    if ( !checkPassword ) return next( { message: 'Incorrect password', status: 401 } )
+
+    // Create tokens
+    const token = {
+      access: createToken( name, id, role, JWT_SECRET, '15min' ),
+      refresh: createToken( name, id, role, JWT_SECRET, '7d' ),
+    }
+
+    // Set tokens
+    res.cookie( 'access-token', token.access )
+    res.cookie( 'refresh-token', token.refresh, { maxAge: REFRESH_TOKEN_EXPIRY } )
+    // Can be useful in frontend
+    res.cookie( 'user-role', role )
+
+    res.json( { ...retrievedUser.toJSON(), token } )
+  } catch ( err ) { return new Error( err ) }
 } )
 
 export default router
