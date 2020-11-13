@@ -133,7 +133,7 @@ router.post( '/token', ( { body }, res, next ) => {
 
 /**
  * Generate new set of tokens
- * Input: {token: {refresh: string, access: string}}
+ * Input: {tokens: {refresh: string, access: string}}
  *
  */
 router.post( '/token/update', async ( { body }, res, next ) => {
