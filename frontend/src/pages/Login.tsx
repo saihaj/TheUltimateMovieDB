@@ -5,6 +5,8 @@ import clsx from 'clsx'
 import { Link } from '@reach/router'
 
 import Layout from '../components/Layout'
+import FormInputFields from '../components/FormInput'
+import FormSubmitButton from '../components/FormSubmitButton'
 import { PageProps } from '../lib/types'
 import useQuery from '../hooks/use-query'
 import { login } from '../lib/auth'
@@ -60,58 +62,10 @@ const Register: FC<PageProps> = () => {
 
           <h1 className="text-2xl font-bold text-center">Sign In</h1>
 
-          {registerFormOptions.map( ( { id, type, placeholder } ) => (
-            <label htmlFor={id} key={id}>
-
-              <span>{placeholder}</span>
-
-              <div className="flex">
-
-                <input
-                  id={id}
-                  type={type}
-                  placeholder={placeholder}
-                  {...formik.getFieldProps( id )}
-                  className={clsx(
-                    'form-input my-2 block w-full rounded-lg text-black',
-                    //  @ts-expect-error return type issue because of `id`. I trust myself.
-                    { 'border-yellow-400 border-4': formik.errors[ id ] },
-                  )}
-                />
-
-                {/* @ts-expect-error return type issue because of `id`. I trust myself. */}
-                {formik.touched[ id ] && formik.errors[ id ] ? (
-                  <div className="w-6 text-red-600 my-auto" style={{ marginLeft: '-35px' }}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                ) : null}
-
-              </div>
-
-              {/* @ts-expect-error return type issue because of `id`. I trust myself. */}
-              {formik.touched[ id ] && formik.errors[ id ] ? (
-                <div>
-                  {/* @ts-expect-error return type issue because of `id`. I trust myself. */}
-                  <p className="text-red-600 text-xs italic">{formik.errors[ id ]}</p>
-                </div>
-              ) : null}
-
-            </label>
-          ) )}
+          {registerFormOptions.map( props => <FormInputFields formik={formik} {...props} /> )}
 
           <div className="flex justify-center">
-            <button
-              type="submit"
-              className={clsx(
-                'mt-2 w-full py-1 font-semibold',
-                'rounded-lg border-2 border-white',
-                'hover:bg-yellow-400 hover:border-yellow-400 hover:text-indigo-800',
-              )}
-            >
-              Login
-            </button>
+            <FormSubmitButton label="Login" />
           </div>
 
           <div className="text-xl pt-2">
