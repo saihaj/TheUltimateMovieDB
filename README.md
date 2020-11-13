@@ -2,7 +2,8 @@
 
 Authors of this project:
 - Co-author: **Saihajpreet Singh** (101150058)
-- Co-author: **Mihir Gupta** (101172281)
+
+~~- Co-author: **Mihir Gupta** (101172281)~~ (No longer partner as of November 11,2020)
 
 Since this top-level README is for describing higher level things for project. We suggest that you also checkout the readme in dirs if you encounter any project specific issues. are some issues when you using them. There shouldn't be any issues since its very simple but who knows. We try to keep notes and important instructions in related dirs to make it easy. We assume that you have working using NodeJS v12.x and NPM installed on your machine.
 
@@ -13,6 +14,7 @@ Since this top-level README is for describing higher level things for project. W
    - [Project Check - in](#project-check---in)
      - [1 (October 7, 2020)](#1-october-7-2020)
      - [2 (October 27, 2020)](#2-october-27-2020)
+     - [3 (November 13, 2020)](#3-november-13-2020)
    - [Available Scripts](#available-scripts)
 
 ## Project Structure
@@ -140,6 +142,54 @@ Right now our scripts are not the most efficient. Reason is that we are iteratin
 
 There are many things that we need to work on. Some of improvements we would like to add in next check-in:
 - Error Checking for API - Currently we did not spend too much time since validation and all are easily taken care when our mongo is initialized properly.
+
+### #3 (November 13, 2020)
+In this check-in I worked on DB initialization scripts, modified schema png made in last check-in and wrote schema for mongodb using mongoose. Use mongodb to store people and users and support different routes. Add support for sessions using JWT and use that on client.
+
+#### Backend
+- Setup MongoDB schema
+- Persist data for users and people in database
+- Tidy up initialization scripts
+  - They work the way I want to structure in my database. The issue I am facing is that I want to have relations between felids because my schema is spread into different collections. 
+  - There are two ways to approach this
+    - Use a UUID for different fields and when inserting use them as a source of truth to replace with mongo object id
+    - Insert the big json object as is and then try to break it
+- Movies route doesn't use database because of the problem I am trying to solve in my initialization scripts.
+- Setup sessions using JWT by sending 2 tokens refresh and access to the user and also set them as cookies
+- Create custom middleware to handle errors. Return proper status codes, descriptive error messages and path and request type for additional debugging.
+
+For detailed endpoint documentation see README in [`backend`](./backend/README.md) directory.
+
+#### Frontend
+- Setup React Context to manage state of authorized users
+  - Pareses the cookies in fronted to get the token and decode to get information:
+    - name
+    - unique user id
+    - role
+- Hook up sign in and register forms to backend
+- `/me` route that can be used to check if user is logged in or not
+- Dynamically change the navigation bar based on if user is logged in
+- Show logout button on user profile page (only if they are logged in)
+- Show change role button on user profile (only for logged in users)
+- Show Add people (director, actor, writer) if the user role in "contributor"
+- Make stylistic and data fetching changes to pages
+  - Show descriptive errors for form validation
+  - Refactor UI logic for form which is shared in different forms
+
+#### Carleton OpenStack
+This is deployed on [OpenStack](https://carleton.ca/scs/tech-support/scs-open-stack/). The public IP address for my instance is `134.117.128.78`
+
+To see my project:
+- `ssh student@134.117.128.78`
+- Once you are logged in then `cd TheUltimateMovieDB`
+- I have installed all the dependencies but if something seems to fail please run `npm install`
+- Database should also be running but if it is not please run `cd backend && sudo npm run start:mongo && cd ..`
+- Now do `npm start` and this should clean build the backend (`http://localhost:4000`) and frontend (`http://localhost:3000`). It is important the the DB is running otherwise backend will crash if it fails to connect to DB.
+- Once you see "[start:frontend] Compiled successfully!" you should be able to tunnel and check the site.
+- When I tested I just needed to tunnel my frontend and it was working fine. To run site on your machine at `https://localhost:9999` run this `ssh -L 9999:localhost:3000 student@134.117.128.78` and it should work!
+- Test User credentials
+  - email: test@test.com
+  - password: testtesttest
 
 ## Available Scripts
 `npm run [command]`
