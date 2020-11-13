@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 import { omit } from 'lodash'
 
 import Models from '../models'
@@ -85,6 +86,41 @@ router.post( '/login', async ( { body }, res, next ) => {
 
     res.json( { ...retrievedUser.toJSON(), token } )
   } catch ( err ) { return new Error( err ) }
+} )
+
+router.post( '/token', ( { body }, res, next ) => {
+  if ( !body.token ) {
+    return next( { message: 'Missing refresh token', status: 403 } )
+  }
+
+  // @ts-expect-error
+  const accessToken = jwt.verify( body.token, JWT_SECRET, ( err, user ) => {
+    if ( err ) {
+      return next( { message: 'Invalid refresh token', status: 403 } )
+    }
+
+    const { name, userId, role } = user
+    return createToken( name, userId, role, JWT_SECRET, '15min' )
+  } )
+
+  res.cookie( 'access-token', accessToken )
+  return res.json( { token: accessToken } )
+} )
+
+router.post( '/token/decode', ( { body }, res, next ) => {
+  if ( !body.token ) {
+    return next( { message: 'Missing token', status: 403 } )
+  }
+
+  // @ts-expect-error
+  const accessToken = jwt.verify( body.token, JWT_SECRET, ( err, user ) => {
+    if ( err ) {
+      return next( { message: 'Invalid token', status: 403 } )
+    }
+    return user
+  } )
+
+  return res.json( accessToken )
 } )
 
 export default router
