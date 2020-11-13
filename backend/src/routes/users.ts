@@ -29,6 +29,26 @@ router.get( '/:userId', async ( { params: { userId } }, res, next ) => {
   } catch ( err ) { return next( err ) }
 } )
 
+// Change user role
+router.patch( '/:userId/role', async ( { params: { userId } }, res, next ) => {
+  try {
+    const user = await GetItemById( Models.User, userId )
+    if ( user ) {
+      const role = user.role === 'contributing' ? 'regular' : 'contributing'
+
+      const updatedUser = await Models.User.updateOne(
+        { _id: userId }, { role }, ( err, updated ) => {
+          if ( err ) return next( err )
+          return updated
+        },
+      )
+
+      return res.json( { ...updatedUser, role } )
+    }
+    return next( DnE( userId ) )
+  } catch ( err ) { return next( err ) }
+} )
+
 /**
  * Add a user
  * Provide
