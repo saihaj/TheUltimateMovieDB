@@ -49,15 +49,17 @@ const Register: FC<PageProps> = () => {
         },
         body: JSON.stringify( {
           name: `${values.firstName} ${values.lastName}`,
-          role: 'Regular',
+          email: values.email,
+          password: values.password,
         } ),
       } )
 
-      // If all good take to all users page
+      // If all good sign in the user and take to profile page
       if ( response.status === 200 ) {
-        window.location.replace( '/profile' )
+        window.location.assign( `/login?email=${values.email}` )
       } else {
-        alert( 'Something went wrong!!!' )
+        const { message } = await response.json()
+        alert( `Something went wrong!!! ${message}` )
       }
     },
   } )

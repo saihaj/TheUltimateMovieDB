@@ -7,6 +7,7 @@ import { Link } from '@reach/router'
 import Layout from '../components/Layout'
 import { PageProps } from '../lib/types'
 import useQuery from '../hooks/use-query'
+import { login } from '../lib/auth'
 
 const registerFormOptions = [
   { id: 'email', type: 'email', placeholder: 'Email Address' },
@@ -30,8 +31,14 @@ const Register: FC<PageProps> = () => {
         .matches( /^[a-zA-Z0-9]+$/, 'Password must be alpha numeric and contain Latin letters.' )
         .required( 'Password is required' ),
     } ),
-    onSubmit: values => {
-      alert( JSON.stringify( values, null, 2 ) )
+    onSubmit: async values => {
+      const response = await ( await login( values.email, values.password ) ).json()
+
+      if ( !response.error ) {
+        window.location.assign( '/me' )
+      } else {
+        alert( response.message )
+      }
     },
   } )
 
