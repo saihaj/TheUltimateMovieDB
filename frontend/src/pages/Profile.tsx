@@ -1,9 +1,11 @@
-import React, { FC } from 'react'
+import React, { FC, useContext } from 'react'
 import { Link, useParams } from '@reach/router'
 import useSWR from 'swr'
 
 import { PageProps } from '../lib/types'
 import Layout from '../components/Layout'
+import LinkButton from '../components/LinkButton'
+import { AuthContext } from '../lib/auth'
 
 const DummyContribData = () => (
   <>
@@ -48,9 +50,19 @@ const UserDataFetch = ( { name, userRole }: UserProfileDataProps ) => (
   </div>
 )
 
+const EditOptions = () => (
+  <div className="pt-8">
+    <div className="flex flex-col w-full mt-8 md:w-1/2 px-4">
+      <h2 className="text-2xl pb-2">Contributing User Perks</h2>
+      <LinkButton to="/people/create" label="Add new person" />
+    </div>
+  </div>
+)
+
 const UserProfile: FC<PageProps> = () => {
   const { userId } = useParams()
   const { data } = useSWR( `/api/users/${userId}` )
+  const { state: { role } } = useContext( AuthContext )
 
   return (
     <Layout>
@@ -62,6 +74,7 @@ const UserProfile: FC<PageProps> = () => {
         <div className="flex flex-col md:flex-row justify-around">
           <DummyContribData />
         </div>
+        {role === 'contributing' && <EditOptions />}
       </>
       )}
     </Layout>
