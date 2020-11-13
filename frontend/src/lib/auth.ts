@@ -6,12 +6,14 @@ type AuthState = {
   userId: string | undefined;
   role: string | undefined;
   name: string | undefined;
-}
+};
+
 type AuthActionType = {
   type: 'LOGIN';
-}
+};
+
 export enum AUTH_ACTIONS {
-    login='LOGIN'
+  login = 'LOGIN',
 }
 
 export const initialAuthState = {
@@ -56,7 +58,6 @@ export const authReducer = (
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       const accessToken = cookies[ 'access-token' ]
-
       if ( !accessToken ) return state
 
       //   Too much work to get typechecking to work on JWT
