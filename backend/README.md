@@ -26,6 +26,19 @@ NOTE: Currently we are just using the [`movie-data-short.json`](../dataset/movie
   - `/:user`
     - Returns a user
 
+- `people`
+  - Following fields should be returned by all endpoints in this route. Check for exceptions or additional fields for that route.
+    - `_id`
+    - `name`
+    - `director: [ MovieObjectId ]`
+    - `writer: [ MovieObjectId ]`
+    - `actor: [ MovieObjectId ]`
+  - `/`:
+    - Returns and array of people objects
+    - `/:personId`
+      - Returns a people object
+      - 
+
 - `movies`
   - Following fields should be returned by all endpoints in this route. Check for exceptions or additional fields for that route.
     - `id`
@@ -56,3 +69,11 @@ NOTE: Currently we are just using the [`movie-data-short.json`](../dataset/movie
       - `poster`
       - `rated`
       - `released`
+- `people`
+  - `/`
+    - Returns a success message. You must specify the following fields.
+      - `name`
+        - Optional Fields
+          - `director: [MovieObjectId]`
+          - `actor: [MovieObjectId]`
+          - `writer: [MovieObjectId]`
