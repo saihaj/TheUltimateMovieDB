@@ -1,11 +1,14 @@
-import React, { FC, useContext } from 'react'
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import React, { FC, useContext, useEffect } from 'react'
 import { Link, useParams } from '@reach/router'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
+import clsx from 'clsx'
 
 import { PageProps } from '../lib/types'
 import Layout from '../components/Layout'
 import LinkButton from '../components/LinkButton'
-import { AuthContext } from '../lib/auth'
+import { AuthContext, AUTH_ACTIONS, parseCookies } from '../lib/auth'
 
 const DummyContribData = () => (
   <>
@@ -50,22 +53,81 @@ const UserDataFetch = ( { name, userRole }: UserProfileDataProps ) => (
   </div>
 )
 
-const EditOptions = () => (
-  <div className="pt-8">
-    <div className="flex flex-col w-full mt-8 md:w-1/2 px-4">
-      <h2 className="text-2xl pb-2">Contributing User Perks</h2>
-      <LinkButton to="/people/create" label="Add new person" />
-    </div>
+const ContributorEditOptions = () => (
+  <div className="flex flex-col w-full mt-8 md:w-1/2 px-4">
+    <h2 className="text-2xl pb-2">Contributing User Perks</h2>
+    <LinkButton to="/people/create" label="Add new person" />
   </div>
 )
+
+type ActionButtonProps = {
+  action: () => void,
+  label: string
+}
+
+const ActionButton = ( { action, label }:ActionButtonProps ) => (
+  <div
+    className={clsx(
+      'bg-gray-400 text-indigo-800',
+      'px-4 py-1 rounded-lg',
+      'hover:bg-yellow-400',
+    )}
+    style={{ cursor: 'pointer' }}
+    onClick={action}
+  >
+    {label}
+  </div>
+)
+
+const ProfileEditOptions = () => {
+  const { state: { userId }, dispatch } = useContext( AuthContext )
+
+  const changeRole = async () => {
+    await fetch( `/api/users/${userId}/role`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    } )
+
+    const cookies = parseCookies()
+    // @ts-expect-error
+    const refreshToken = cookies[ 'refresh-token' ]
+    // @ts-expect-error
+    const accessToken = cookies[ 'access-token' ]
+    fetch( '/api/users/token/update', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify( {
+        tokens: { refresh: refreshToken, access: accessToken },
+      } ),
+    } )
+      .then( () => dispatch( { type: AUTH_ACTIONS.reLogin } ) )
+      .catch( err => alert( err ) )
+  }
+
+  return (
+    <div className="flex flex-col w-full mt-8 md:w-1/2 px-4">
+      <h2 className="text-2xl pb-2">Edit Profile</h2>
+      <ActionButton action={changeRole} label="Change Role" />
+      <ActionButton action={() => dispatch( { type: AUTH_ACTIONS.logout } )} label="Logout" />
+    </div>
+  )
+}
 
 const UserProfile: FC<PageProps> = () => {
   const { userId } = useParams()
   const { data } = useSWR( `/api/users/${userId}` )
-  const { state: { role } } = useContext( AuthContext )
+  const { state: { isAuthenticated, role } } = useContext( AuthContext )
+
+  useEffect( () => {
+    mutate( `/api/users/${userId}` )
+  }, [ role, userId ] )
 
   return (
-    <Layout>
+    <Layout nav>
       {!data && <div>Loading...</div>}
       {data?.error && <h1 className="text-center text-3xl pt-16">We have a problem! User not found</h1>}
       {!data?.error && data && (
@@ -74,7 +136,10 @@ const UserProfile: FC<PageProps> = () => {
         <div className="flex flex-col md:flex-row justify-around">
           <DummyContribData />
         </div>
-        {role === 'contributing' && <EditOptions />}
+        <div className="flex flex-col md:flex-row justify-around">
+          {isAuthenticated && <ProfileEditOptions />}
+          {role === 'contributing' && <ContributorEditOptions />}
+        </div>
       </>
       )}
     </Layout>

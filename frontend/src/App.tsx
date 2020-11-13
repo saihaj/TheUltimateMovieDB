@@ -1,7 +1,7 @@
-import React, { Suspense, lazy, useReducer } from 'react'
+import React, { Suspense, lazy, useReducer, useEffect } from 'react'
 import { Router } from '@reach/router'
 
-import { AuthContext, authReducer, initialAuthState } from './lib/auth'
+import { AuthContext, authReducer, initialAuthState, AUTH_ACTIONS, parseCookies } from './lib/auth'
 
 const Home = lazy( () => import( './pages/Home' ) )
 const Movies = lazy( () => import( './pages/Movies' ) )
@@ -33,6 +33,24 @@ const NavigationRoutes = () => (
  */
 const App = () => {
   const [ state, dispatch ] = useReducer( authReducer, initialAuthState )
+
+  useEffect( () => {
+    const cookies = parseCookies()
+    // @ts-expect-error
+    const refreshToken = cookies[ 'refresh-token' ]
+
+    fetch( '/api/users/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify( {
+        token: refreshToken,
+      } ),
+    } )
+      .then( () => dispatch( { type: AUTH_ACTIONS.reLogin } ) )
+      .catch( err => alert( err ) )
+  }, [ dispatch ] )
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
