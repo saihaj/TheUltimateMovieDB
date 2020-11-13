@@ -2,8 +2,8 @@ import React, { FC } from 'react'
 import { Link, useParams } from '@reach/router'
 import useSWR from 'swr'
 
-import { PageProps } from '../../lib/types'
-import Layout from '../../components/Layout'
+import { PageProps } from '../lib/types'
+import Layout from '../components/Layout'
 
 const DummyContribData = () => (
   <>
@@ -50,13 +50,13 @@ const UserDataFetch = ( { name, userRole }: UserProfileDataProps ) => (
 
 const UserProfile: FC<PageProps> = () => {
   const { userId } = useParams()
-  const { data, error } = useSWR( `/api/users/${userId}` )
+  const { data } = useSWR( `/api/users/${userId}` )
 
   return (
     <Layout>
-      {!error && !data && <div>Loading...</div>}
-      {error && <h1 className="text-center text-3xl pt-16">We have a problem! User not found</h1>}
-      {data && (
+      {!data && <div>Loading...</div>}
+      {data?.error && <h1 className="text-center text-3xl pt-16">We have a problem! User not found</h1>}
+      {!data?.error && data && (
       <>
         <UserDataFetch name={data.name} userRole={data.role} />
         <div className="flex flex-col md:flex-row justify-around">

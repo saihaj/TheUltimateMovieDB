@@ -8,7 +8,7 @@ const Movies = lazy( () => import( './pages/Movies' ) )
 const NotFound = lazy( () => import( './pages/404' ) )
 const Register = lazy( () => import( './pages/Register' ) )
 const Login = lazy( () => import( './pages/Login' ) )
-const Profile = lazy( () => import( './pages/Users' ) )
+const Profile = lazy( () => import( './pages/Profile' ) )
 const UserMePage = lazy( () => import( './pages/Me' ) )
 
 /**
@@ -21,7 +21,7 @@ const NavigationRoutes = () => (
     <Movies path="movies/*" />
     <Register path="register" />
     <Login path="login" />
-    <Profile path="profile/*" />
+    <Profile path="profile/:userId" />
     <UserMePage path="me" />
   </Router>
 )
