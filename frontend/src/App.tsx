@@ -10,6 +10,7 @@ const Register = lazy( () => import( './pages/Register' ) )
 const Login = lazy( () => import( './pages/Login' ) )
 const Profile = lazy( () => import( './pages/Profile' ) )
 const UserMePage = lazy( () => import( './pages/Me' ) )
+const People = lazy( () => import( './pages/Users' ) )
 
 /**
  * Setup Top-Level Routes for @reach/router
@@ -22,6 +23,7 @@ const NavigationRoutes = () => (
     <Register path="register" />
     <Login path="login" />
     <Profile path="profile/:userId" />
+    <People path="people/*" />
     <UserMePage path="me" />
   </Router>
 )

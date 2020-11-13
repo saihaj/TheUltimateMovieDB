@@ -1,24 +1,26 @@
-import React, { lazy, ComponentType } from 'react'
+import React, { lazy, ComponentType, useContext } from 'react'
 import { Router } from '@reach/router'
 
 import { PageProps } from '../../lib/types'
+import { AuthContext } from '../../lib/auth'
 
 const NotFound = lazy( () => import( '../404' ) )
 const Listings = lazy( () => import( './Listings' ) )
 const Profile = lazy( () => import( './Profile' ) )
+const CreateUser = lazy( () => import( './createPerson' ) )
+const NotAllowed = lazy( () => import( '../../components/NotAllowed' ) )
 
-const Movie: ComponentType<PageProps> = ( { children } ) => <div>{children}</div>
+const People: ComponentType<PageProps> = () => {
+  const { state: { role } } = useContext( AuthContext )
 
-const Courses: ComponentType<PageProps> = () => (
-  <Router>
-    <NotFound default />
-    <Listings path="/" />
+  return (
+    <Router>
+      <NotFound default />
+      <Listings path="/" />
+      <Profile path="/:personId" />
+      {role === 'contributing' ? <CreateUser path="create" /> : <NotAllowed path="create" />}
+    </Router>
+  )
+}
 
-    <Movie path=":userId">
-      <Profile path="/" />
-    </Movie>
-
-  </Router>
-)
-
-export default Courses
+export default People
