@@ -24,7 +24,7 @@ const Profile: FC<PageProps> = () => {
   const { data } = useSWR( `/api/people/${personId}` )
 
   return (
-    <Layout>
+    <Layout nav>
       {!data && <div>Loading...</div>}
       {data?.error && <h1 className="text-center text-3xl pt-16">We have a problem! User not found</h1>}
       {!data?.error && data && (

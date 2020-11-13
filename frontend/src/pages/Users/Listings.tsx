@@ -40,7 +40,7 @@ const Listings: FC<PageProps> = () => {
   const { data } = useSwr( '/api/people' )
 
   return (
-    <Layout>
+    <Layout nav>
       {!data && <div>Loading...</div>}
       {data?.error && <h1 className="text-center text-3xl pt-16">We have a problem!</h1>}
 

@@ -30,7 +30,7 @@ const MovieView: FC<PageProps> = () => {
   const { data, error } = useSWR( `/api/movies/${movieId}` )
 
   return (
-    <Layout>
+    <Layout nav>
       {!error && !data && <div>Loading...</div>}
       {error && <h1 className="text-center text-3xl pt-16">We have a problem! Movie not found</h1>}
       {data && (

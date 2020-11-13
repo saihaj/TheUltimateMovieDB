@@ -83,7 +83,7 @@ const Listings: FC<PageProps> = () => {
   const { data, error } = useSwr( '/api/movies' )
 
   return (
-    <Layout>
+    <Layout nav>
       {!error && !data && <div>Loading...</div>}
       {error && <h1 className="text-center text-3xl pt-16">We have a problem!</h1>}
 
