@@ -13,7 +13,9 @@ start       Run clean, build and then start the server
 
 ## Endpoints
 
-NOTE: Currently we are just using the [`movie-data-short.json`](../dataset/movie-data-short.json) for data.
+NOTE: Users and People route use mongo db to store everything. Movies route are not yet moved to use DB it still uses  [`movie-data-short.json`](../dataset/movie-data-short.json) for data and the data is stored in RAM for this route only.
+
+I did setup mongo schema for all the routes see [`models`](./src/models/index.ts)
 
 ### GET
 - `users`
