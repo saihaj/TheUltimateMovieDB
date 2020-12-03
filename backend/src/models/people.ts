@@ -6,6 +6,8 @@ const PersonSchema = new Schema( {
   name: {
     type: String,
     required: true,
+    unique: true,
+    index: true,
   },
   director: [ ObjectReference( 'Movie', false ) ],
   writer: [ ObjectReference( 'Movie', false ) ],
