@@ -1,7 +1,7 @@
 //@ts-nocheck
 // import data from "../../dataset/movie-data.json"
-import data from '../movie-data.json';
-// import data from "../movie-data";
+// import data from '../movie-data.json';
+import data from "../movie-data";
 import { camelCase } from "lodash";
 import { v4 } from "uuid";
 import Models from "../models/index";
@@ -216,12 +216,119 @@ const moviesCollection = (topLevelFilters, metaDataFilters) => {
   });
 };
 
-// const test = [];
+const relateMovieWriterToPersons = async () => {
+  const movies = await Models.MovieModel.find();
+  movies.map((a) => {
+    const tempId = [];
+    Promise.all(
+      a.writers.map(
+        async (name) =>
+          await Models.People.findOneAndUpdate(
+            { name },
+            { $push: { writer: a._id } }
+          ).exec()
+      )
+    ).then(async (b) => {
+      b.map((x) => tempId.push(x._id));
+
+      await Models.MovieModel.updateOne(
+        { _id: a._id },
+        { $set: { writers: tempId } }
+      ).exec();
+      console.log(`Updated writers ${a.title}`);
+    });
+  });
+};
+
+const relateMovieActorToPersons = async () => {
+  const movies = await Models.MovieModel.find();
+  movies.map((a) => {
+    const tempId = [];
+    Promise.all(
+      a.actors.map(
+        async (name) =>
+          await Models.People.findOneAndUpdate(
+            { name },
+            { $push: { actor: a._id } }
+          ).exec()
+      )
+    ).then(async (b) => {
+      b.map((x) => tempId.push(x._id));
+      await Models.MovieModel.updateOne(
+        { _id: a._id },
+        { $set: { actors: tempId } }
+      ).exec();
+      console.log(`Updated actor ${a.title}`);
+    });
+  });
+};
+
+const relateMovieDirectorsToPersons = async () => {
+  const movies = await Models.MovieModel.find();
+  movies.map((a) => {
+    const tempId = [];
+    Promise.all(
+      a.directors.map(
+        async (name) =>
+          await Models.People.findOneAndUpdate(
+            { name },
+            { $push: { director: a._id } }
+          ).exec()
+      )
+    ).then(async (b) => {
+      b.map((x) => tempId.push(x._id));
+      await Models.MovieModel.updateOne(
+        { _id: a._id },
+        { $set: { directors: tempId } }
+      ).exec();
+      console.log(`Updated director ${a.title}`);
+    });
+  });
+};
+
+const updateActorObjectId = async () => {
+  const movies = await Models.MovieModel.find();
+  movies.map(async (a) => {
+    const tempId = [];
+    a.actors.map((b) => tempId.push(mongoose.Types.ObjectId(b)));
+    await Models.MovieModel.updateOne(
+      { _id: a._id },
+      { $set: { actors: tempId } }
+    ).exec();
+    console.log(`Updated actors ${a.title}`);
+  });
+};
+
+const updateWriterObjectId = async () => {
+  const movies = await Models.MovieModel.find();
+  movies.map(async (a) => {
+    const tempId = [];
+    a.writers.map((b) => tempId.push(mongoose.Types.ObjectId(b)));
+    await Models.MovieModel.updateOne(
+      { _id: a._id },
+      { $set: { writers: tempId } }
+    ).exec();
+    console.log(`Updated writer ${a.title}`);
+  });
+};
+
+const updateDirectorObjectId = async () => {
+  const movies = await Models.MovieModel.find();
+  movies.map(async (a) => {
+    const tempId = [];
+    a.directors.map((b) => tempId.push(mongoose.Types.ObjectId(b)));
+    await Models.MovieModel.updateOne(
+      { _id: a._id },
+      { $set: { directors: tempId } }
+    ).exec();
+    console.log(`Updated director ${a.title}`);
+  });
+};
 
 const start = async () => {
   // Connect to DB
   try {
-    await mongoose.connect("mongodb://root:toor@localhost:27017", {
+    await mongoose.connect("mongodb://localhost:27017/freqCollabs", {
       useNewUrlParser: true,
     });
     console.log("Connected to MongoDB");
@@ -231,13 +338,23 @@ const start = async () => {
     process.exit(126);
   }
 
-  // const movies = await Models.MovieModel.find().populate('meta')
+  // const movies = await Models.MovieModel.find();
+  // const movies = await Models.MovieModel.findOne({title:"Toy Story"}).populate("directors")
+  // console.log(movies);
+  // const searchPerson = await Models.People.findOne({
+  //   name: "Andrew Stanton",
+  // }).populate("writer");
+  // console.log(searchPerson);
+  // console.log(movies);
 
-  // const searchPerson = await Models.People.findOne({name:"John Lasseter"})
-  // console.log(searchPerson)
-  // console.log(movies)
-  personCollection(peopleKeys);
   // moviesCollection(includeInMovieCollection, includeInMovieMetaCollection);
+  // personCollection(peopleKeys);
+  // relateMovieWriterToPersons();
+  // relateMovieActorToPersons();
+  // relateMovieDirectorsToPersons();
+  // updateWriterObjectId();
+  // updateActorObjectId();
+  // updateDirectorObjectId();
 };
 
 start();

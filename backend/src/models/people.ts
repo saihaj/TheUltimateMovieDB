@@ -12,6 +12,10 @@ const PersonSchema = new Schema( {
   director: [ ObjectReference( 'Movie', false ) ],
   writer: [ ObjectReference( 'Movie', false ) ],
   actor: [ ObjectReference( 'Movie', false ) ],
+  collaborators: [ {
+    person: ObjectReference( 'People', false ),
+    count: Number,
+  } ],
 } )
 
 export default model( 'People', PersonSchema )

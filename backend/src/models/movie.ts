@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model } from 'mongoose';
 
-import { ObjectReference } from '../utils/db'
+import { ObjectReference } from '../utils/db';
 
 const MovieSchema = new Schema( {
   title: {
@@ -19,18 +19,20 @@ const MovieSchema = new Schema( {
     type: String,
     required: true,
   },
-  genre: [ {
-    type: String,
-    required: true,
-    index: true,
-   } ],
+  genre: [
+    {
+      type: String,
+      required: true,
+      index: true,
+    },
+  ],
   meta: ObjectReference( 'MovieMeta' ),
-  directors: [ String ],
-  actors: [ String ],
-  writers: [ String ],
-  // directors: [ ObjectReference( 'People' ) ],
-  // actors: [ ObjectReference( 'People' ) ],
-  // writers: [ ObjectReference( 'People' ) ],
+  // directors: [ String ],
+  // actors: [ String ],
+  // writers: [ String ],
+  directors: [ ObjectReference( 'People' ) ],
+  actors: [ ObjectReference( 'People' ) ],
+  writers: [ ObjectReference( 'People' ) ],
 } )
 
 export const MovieModel = model( 'Movie', MovieSchema )
@@ -47,7 +49,7 @@ const MovieReviewSchema = new Schema( {
   upvotes: VotesType,
 } )
 
-export const MovieReviewModel = model( 'MovieReview', MovieReviewSchema )
+export const MovieReviewModel = model( 'MovieReview', MovieReviewSchema );
 
 const MovieRatingsSchema = new Schema( {
   downvotes: VotesType,
