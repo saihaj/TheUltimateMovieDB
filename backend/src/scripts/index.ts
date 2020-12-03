@@ -1,5 +1,6 @@
-// import data from '../../dataset/movie-data.ts'
-import data from "./movie-data"
+//@ts-nocheck
+// import data from "../../dataset/movie-data.json"
+import data from "../movie-data"
 import { camelCase } from "lodash"
 import fs from "fs"
 import { v4 } from "uuid"
@@ -139,7 +140,7 @@ const topLevelClean = (list, topLevelFilters, metaDataFilters) => {
           }
         }
         // should be an array
-        else if (["genre"].includes(key)) {
+        else if (["genre", "Language"].includes(key)) {
           temp = {
             ...temp,
             [camelCase(key)]: List(obj[key]),

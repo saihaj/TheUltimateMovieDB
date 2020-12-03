@@ -12,7 +12,7 @@
     "dev:node": "nodemon dist/index.js",
     "dev": "run-p -l dev:*",
     "lint": "eslint . --ext .js,.ts --color",
-    "db": "node -r esm scripts/index.js",
+    "db": "node dist/scripts/index.js",
     "start:mongo": "cd mongodb && docker-compose up -d",
     "stop:mongo": "cd mongodb && docker-compose down",
     "install:docker": "cd mongodb && docker-compose pull"
