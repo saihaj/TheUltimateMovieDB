@@ -19,11 +19,18 @@ const MovieSchema = new Schema( {
     type: String,
     required: true,
   },
-  genre: [ String ],
+  genre: [ {
+    type: String,
+    required: true,
+    index: true,
+   } ],
   meta: ObjectReference( 'MovieMeta' ),
-  directors: [ ObjectReference( 'People' ) ],
-  actors: [ ObjectReference( 'People' ) ],
-  writers: [ ObjectReference( 'People' ) ],
+  directors: [ String ],
+  actors: [ String ],
+  writers: [ String ],
+  // directors: [ ObjectReference( 'People' ) ],
+  // actors: [ ObjectReference( 'People' ) ],
+  // writers: [ ObjectReference( 'People' ) ],
 } )
 
 export const MovieModel = model( 'Movie', MovieSchema )
@@ -55,8 +62,8 @@ const MovieMetaSchema = new Schema( {
   country: String,
   releaseDate: String,
   metaScore: Number,
-  reviews: ObjectReference( 'MovieReview' ),
-  ratings: ObjectReference( 'MovieRating' ),
+  // reviews: ObjectReference( 'MovieReview' ),
+  // ratings: ObjectReference( 'MovieRating' ),
   imdb: {
     imdbId: String,
     votes: Number,
