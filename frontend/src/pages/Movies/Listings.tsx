@@ -1,6 +1,8 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable no-underscore-dangle */
 import React, { FC, useEffect, useRef, useState } from 'react'
-import { Link } from '@reach/router'
+import { Link, useNavigate } from '@reach/router'
 import cx from 'clsx'
 import useSwr from 'swr'
 
@@ -66,11 +68,13 @@ const MovieCard = ( {
 
 const Listings: FC<PageProps> = () => {
   const [ mounted, setMounted ] = useState( false )
-  const offset = useQuery( 'offset' ) || 0
+  const offset = useState( useQuery( 'offset' ) || 0 )
   const title = useQuery( 'title' ) || undefined
   const genre = useQuery( 'genre' ) || undefined
-  const apiQueryString = '/api/movies?limit=9'
+  const limit = useQuery( 'limit' ) || 9
+  const apiQueryString = `/api/movies?limit=${limit}`
   const queryString = useRef( apiQueryString )
+  const navigate = useNavigate()
 
   useEffect( () => {
     const cleanQueryParam = () => {
@@ -88,7 +92,6 @@ const Listings: FC<PageProps> = () => {
 
       return `${apiQueryString}&offset=${offset}`
     }
-
     queryString.current = cleanQueryParam()
     setMounted( true )
   }, [ title, genre, offset, mounted ] )
@@ -104,7 +107,7 @@ const Listings: FC<PageProps> = () => {
 
       {data && (
       <div className="md:flex md:flex-wrap">
-        {data.map(
+        {data.results.map(
           ( a: {
               _id: MovieCardProps['movieId'];
               title: MovieCardProps['title'];
@@ -121,6 +124,21 @@ const Listings: FC<PageProps> = () => {
                 releaseDate={a.meta.releaseDate}
               />
           ),
+        )}
+        {!genre && !title && (
+        <div
+          className="text-center text-4xl mx-auto py-2 hover:text-yellow-400"
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            const url = new URL( window.location.href )
+            url.searchParams.set( 'offset', data.info.nextOffset )
+            navigate( `${url.pathname}${url.search}`, { replace: true } )
+            // eslint-disable-next-line no-restricted-globals
+            location.reload()
+          }}
+        >
+          Next
+        </div>
         )}
       </div>
       )}
