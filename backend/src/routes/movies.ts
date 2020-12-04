@@ -1,12 +1,17 @@
 import { Router } from 'express'
 import { v4 } from 'uuid'
-import { pick } from 'lodash'
 
+import Models from '../models'
 import dataset from '../movie-data'
+import { NumChecking, EscapeRegex, GetItemById, DnE } from '../utils/db'
 
 const router = Router()
 
-const returnItems = [ 'id', 'title', 'genre', 'director', 'actors', 'writer', 'poster', 'rated', 'released' ]
+type SearchParamMovies = {
+  year?:string
+  title?:string | RegExp
+  genre?:string
+}
 
 /**
  * Get all movies
@@ -14,38 +19,48 @@ const returnItems = [ 'id', 'title', 'genre', 'director', 'actors', 'writer', 'p
  *   - title
  *   - genre
  *   - year
- *   - year
- *   - minrating
+ * query params
+ *    - limit: default 10 max 50
+ *    - offset: default 0
+ * Ascending order
+ * For Return type of object see `MovieSchema`
  */
-router.get( '/', ( _, res ) => {
-  const temp:any = []
+router.get( '/', async ( { query }, res, next ) => {
+  try {
+    const limit = NumChecking( parseInt( query.limit as string, 10 ), 10, 50 )
+    const offset = NumChecking( parseInt( query.offset as string, 10 ), 0 )
 
-  dataset.forEach( ( a ) => temp.push( pick( a, returnItems ) ) )
+    const searchParams:SearchParamMovies = {}
 
-  res.json( temp )
+    if ( query.year ) {
+      searchParams.year = query.year as string
+    }
+
+    if ( query.title ) {
+      searchParams.title = new RegExp( EscapeRegex( query.title as string ), 'gi' )
+    }
+
+    if ( query.genre ) {
+      searchParams.genre = query.genre as string
+    }
+
+    const movies = await Models.MovieModel
+      .find( searchParams, null, { sort: { title: 1 }, skip: offset, limit } ).populate( 'meta' )
+
+    return res.json( movies );
+  } catch ( err ) { return next( err ) }
 } )
 
 /**
  * Get movie by ID
- * Return an object with following:
- *   - title
- *   - genre
- *   - year
- *   - actors
- *   - writer
- *   - director
- *   - poster
- *   - rated
- *   - released
+ * For Return type of object see `MovieSchema`
  */
-router.get( '/:movie', ( { params: { movie } }, res ) => {
-  const currentMov = dataset.find( ( { id } ) => id === movie )
-
-  if ( currentMov === undefined ) {
-    res.status( 404 )
-  }
-
-  res.json( pick( currentMov, returnItems ) )
+router.get( '/:movie', async ( { params: { movie } }, res, next ) => {
+  try {
+    const movieObj = await GetItemById( Models.MovieModel, movie )
+    if ( movieObj ) return res.json( movieObj );
+    return next( DnE( movie ) );
+  } catch ( err ) { return next( err ) }
 } )
 
 // Post a movie

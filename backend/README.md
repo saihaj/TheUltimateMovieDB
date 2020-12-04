@@ -47,18 +47,19 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
 
 - `movies`
   - Following fields should be returned by all endpoints in this route. Check for exceptions or additional fields for that route.
-    - `id`
-    - `title`
-    - `genre`
-    - `actors`
-    - `writer`
-    - `director`
-    - `year`
-    - `poster`
-    - `rated`
-    - `released`
+  - Most accurate object return type in [movie model](./src/models/movie.ts)
   - `/`
+    - Query params accepted
+      - title
+      - genre
+      - year
+      - limit 
+        - default: 10
+        - max: 50
+      - offset
+        - default: 0
     - Returns an array of all movies
+    - Movies returned in ascending order as in DB
   - `/:movie`
     - Returns a movie
 

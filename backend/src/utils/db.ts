@@ -47,3 +47,24 @@ export const GetAll = async (
  * @returns 404 error
  */
 export const DnE = ( id: string ) => ( { message: `${id} does not exist`, status: 404 } )
+
+/**
+ * Return a number satisfying upper bounds
+ * @param input
+ * @param def default value
+ * @param max upper bound
+ */
+export const NumChecking = ( input:number, def:number, max?: number ) => {
+  if ( max ) {
+    if ( input > max ) return def
+  }
+
+  if ( input > 0 ) return input
+  return def
+}
+
+/**
+ * Cleanup a string
+ * @param text input to process
+ */
+export const EscapeRegex = ( text:string ) => text.replace( /[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&' )

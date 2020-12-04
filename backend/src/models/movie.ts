@@ -27,6 +27,8 @@ const MovieSchema = new Schema( {
     },
   ],
   meta: ObjectReference( 'MovieMeta' ),
+  // reviews: ObjectReference( 'MovieReview' ),
+  // ratings: ObjectReference( 'MovieRating' ),
   // directors: [ String ],
   // actors: [ String ],
   // writers: [ String ],
@@ -64,8 +66,6 @@ const MovieMetaSchema = new Schema( {
   country: String,
   releaseDate: String,
   metaScore: Number,
-  // reviews: ObjectReference( 'MovieReview' ),
-  // ratings: ObjectReference( 'MovieRating' ),
   imdb: {
     imdbId: String,
     votes: Number,
