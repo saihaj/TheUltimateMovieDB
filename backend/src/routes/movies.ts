@@ -57,7 +57,8 @@ router.get( '/', async ( { query }, res, next ) => {
  */
 router.get( '/:movie', async ( { params: { movie } }, res, next ) => {
   try {
-    const movieObj = await GetItemById( Models.MovieModel, movie )
+    // @ts-expect-error populate type errors
+    const movieObj = await GetItemById( Models.MovieModel, movie, 'directors actors writers' )
     if ( movieObj ) return res.json( movieObj );
     return next( DnE( movie ) );
   } catch ( err ) { return next( err ) }
