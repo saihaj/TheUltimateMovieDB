@@ -45,7 +45,7 @@ router.get( '/', async ( { query }, res, next ) => {
     }
 
     const movies = await Models.MovieModel
-      .find( searchParams, null, { sort: { title: 1 }, skip: offset, limit } ).populate( 'meta' )
+      .find( searchParams, null, { sort: { title: 1 }, skip: offset, limit } ).populate( 'meta directors' )
 
     return res.json( movies );
   } catch ( err ) { return next( err ) }
