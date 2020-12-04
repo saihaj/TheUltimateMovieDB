@@ -28,6 +28,7 @@
     "mongoose": "^5.10.13",
     "mongoose-type-email": "^1.0.13",
     "morgan": "^1.10.0",
+    "response-time": "^2.3.2",
     "uuid": "^8.3.1"
   },
   "devDependencies": {
@@ -39,6 +40,7 @@
     "@types/mongoose": "^5.10.0",
     "@types/morgan": "^1.9.1",
     "@types/node": "^14.11.2",
+    "@types/response-time": "^2.3.4",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.2.0",
     "@typescript-eslint/parser": "^4.2.0",
