@@ -1,9 +1,10 @@
+/* eslint-disable no-underscore-dangle */
 import { Router } from 'express'
 import { v4 } from 'uuid'
 
-import Models from '../models'
-import dataset from '../movie-data'
-import { NumChecking, EscapeRegex, GetItemById, DnE, GetAll } from '../utils/db'
+import Models from '../../models'
+import dataset from '../../movie-data'
+import { NumChecking, EscapeRegex, GetItemById, DnE } from '../../utils/db'
 
 const router = Router()
 
@@ -87,12 +88,10 @@ router.post( '/:movie/review', async ( { params: { movie }, body }, res, next ) 
 
     if ( movieObj ) {
       const review = await new Models.MovieReviewModel(
-        // eslint-disable-next-line no-underscore-dangle
         { user: body.user, comment: body.comment, movie: movieObj._id },
       ).save()
 
       await Models.MovieModel.findByIdAndUpdate(
-        // eslint-disable-next-line no-underscore-dangle
         { _id: movieObj._id },
         { $push: { reviews: review } },
       ).exec()
