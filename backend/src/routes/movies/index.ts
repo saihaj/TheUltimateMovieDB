@@ -7,6 +7,7 @@ import dataset from '../../movie-data'
 import { NumChecking, EscapeRegex, GetItemById, DnE } from '../../utils/db'
 
 import Ratings from './ratings'
+import Reviews from './review'
 
 const router = Router()
 
@@ -80,49 +81,7 @@ router.post( '/', ( { body }, res ) => {
   res.status( 200 ).json( { message: 'Successfully added the movie' } )
 } )
 
-/**
- * Write review for a given movie
- * For Return type of object see `MovieReviewSchema`
- */
-router.post( '/:movie/review', async ( { params: { movie }, body }, res, next ) => {
-  try {
-    const movieObj = await GetItemById( Models.MovieModel, movie )
-
-    if ( movieObj ) {
-      const review = await new Models.MovieReviewModel(
-        { user: body.user, comment: body.comment, movie: movieObj._id },
-      ).save()
-
-      await Models.MovieModel.findByIdAndUpdate(
-        { _id: movieObj._id },
-        { $push: { reviews: review } },
-      ).exec()
-
-      return res.json( review )
-    }
-
-    return next( DnE( movie ) );
-  } catch ( err ) { return next( err ) }
-} )
-
-/**
- * Get review on movie by ID
- * For Return type of object see `[MovieReviewSchema]`
- */
-router.get( '/:movie/reviews', async ( { params: { movie } }, res, next ) => {
-  try {
-    const reviews = await Models.MovieReviewModel.find( { movie } ).populate( 'user' )
-
-    if ( reviews ) {
-      if ( reviews.length >= 1 ) {
-        return res.json( reviews )
-      }
-    }
-
-    return next( DnE( movie ) )
-  } catch ( err ) { return next( err ) }
-} )
-
 router.use( '/rating', Ratings )
+router.use( '/review', Reviews )
 
 export default router

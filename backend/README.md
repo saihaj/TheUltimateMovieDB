@@ -71,7 +71,7 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
     - Movies are returned in ascending order as in DB
   - `/:movie`
     - Returns a movie
-  - `/:movie/reviews`
+  - `/reviews/:movie`
     - Returns array of reviews. See [movie review schema](./src/models/movie.ts).
   - `/rating/:movie`
     - Returns array of reviews. See [movie rating schema](./src/models/movie.ts).
@@ -89,7 +89,7 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
       - `poster`
       - `rated`
       - `released`
-  - `/:movie/review`
+  - `/review/:movie`
     - Specify the following fields
       - `user`: ObjectID
       - `comment`: String
