@@ -368,7 +368,9 @@ const freqCollabs = async () => {
           temp = [...temp, ...freqCollabUpdate(person.collaborators, id)];
         }
       })
-    ).then((a) => {console.log(temp)});
+    ).then((a) => {
+      console.log(temp);
+    });
   });
 };
 
@@ -378,10 +380,20 @@ const testing = [
   { person: "Ron", count: 1 },
 ];
 
+const genreCount = async () => {
+  const genreSet = new Set();
+  const movies = await Models.MovieModel.find().select("genre");
+  movies.map(({ genre }) => {
+    genre.map((a) => genreSet.add(a));
+  });
+
+  console.log(genreSet);
+};
+
 const start = async () => {
   // Connect to DB
   try {
-    await mongoose.connect("mongodb://localhost:27017/freqCollabs", {
+    await mongoose.connect("mongodb://localhost:27017/newTest", {
       useNewUrlParser: true,
     });
     console.log("Connected to MongoDB");
@@ -408,7 +420,8 @@ const start = async () => {
   // updateWriterObjectId();
   // updateActorObjectId();
   // updateDirectorObjectId();
-  freqCollabs();
+  // freqCollabs();
+  // genreCount();
 };
 
 start();
