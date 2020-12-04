@@ -22,6 +22,7 @@
     "jwt-decode": "^3.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-join": "^1.1.4",
     "react-scripts": "3.4.3",
     "swr": "^0.3.6",
     "yup": "^0.29.3"
