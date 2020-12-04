@@ -3,13 +3,14 @@ import mongoose from 'mongoose'
 
 import apiRoutes from './routes'
 import middleware from './utils/middleware'
+import { DB_URI } from './utils/consts'
 
 const app = express()
 
 const startServer = async () => {
   // Connect to DB
   try {
-    await mongoose.connect( 'mongodb://localhost:27017/newTest', { useNewUrlParser: true } )
+    await mongoose.connect( DB_URI, { useNewUrlParser: true } )
     console.log( 'Connected to MongoDB' )
   } catch ( err ) {
     console.log( err )
