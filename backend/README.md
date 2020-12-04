@@ -58,8 +58,17 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
         - max: 50
       - offset
         - default: 0
-    - Returns an array of all movies
-    - Movies returned in ascending order as in DB
+    - Returns
+      - ```json
+          {   
+            info: {
+            limit,
+            nextOffset: offset + limit,
+            },
+            results: [movie],
+          }
+      ```
+    - Movies are returned in ascending order as in DB
   - `/:movie`
     - Returns a movie
 
