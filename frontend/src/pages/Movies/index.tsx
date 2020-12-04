@@ -5,6 +5,7 @@ import { PageProps } from '../../lib/types'
 
 const NotFound = lazy( () => import( '../404' ) )
 const Listings = lazy( () => import( './Listings' ) )
+const Genres = lazy( () => import( './GenreListing' ) )
 const MovieView = lazy( () => import( './MovieView' ) )
 
 const Movie: ComponentType<PageProps> = ( { children } ) => <div>{children}</div>
@@ -13,7 +14,7 @@ const Courses: ComponentType<PageProps> = () => (
   <Router>
     <NotFound default />
     <Listings path="/" />
-
+    <Genres path="/genres" />
     <Movie path=":movieId">
       <MovieView path="/" />
     </Movie>

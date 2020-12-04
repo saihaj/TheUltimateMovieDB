@@ -17,10 +17,9 @@ const HomePage:FC<PageProps> = () => (
           <SearchBar />
 
           <div className="pt-4">
-            <LinkButton to="search" label="Search Movie" customStyles="md:mr-16 mr-2" />
+            <LinkButton to="movies/genres" label="Genres" customStyles="md:mr-16 mr-2" />
             <LinkButton to={`movies?offset=${Math.round( Math.random() * 8500 )}`} label="Random Movie" />
           </div>
-
         </div>
 
       </div>
