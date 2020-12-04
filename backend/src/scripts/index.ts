@@ -2,7 +2,7 @@
 // import data from "../../dataset/movie-data.json"
 // import data from '../movie-data.json';
 import data from "../movie-data";
-import { camelCase } from "lodash";
+import { camelCase, compact, template } from "lodash";
 import { v4 } from "uuid";
 import Models from "../models/index";
 import mongoose from "mongoose";
@@ -69,6 +69,35 @@ const setObj = (list, filterKeys) => {
         list.push(temp);
       });
   });
+};
+
+/**
+ * Increments a value in array
+ * @param list Array
+ * @param val value to increment
+ */
+const freqCollabUpdate = (list, val) => {
+  const tempArr = [];
+
+  list.map((a) => {
+    let temp = a;
+    if (a.person === val) {
+      temp = {
+        ...a,
+        count: ++a.count,
+      };
+    }
+    tempArr.push(temp);
+  });
+
+  if (!tempArr.find(({ person }) => person === val)) {
+    tempArr.push({
+      person: val,
+      count: 1,
+    });
+  }
+
+  return tempArr;
 };
 
 // const peopleList = [];
@@ -325,6 +354,30 @@ const updateDirectorObjectId = async () => {
   });
 };
 
+const freqCollabs = async () => {
+  const movies = await Models.MovieModel.find();
+
+  movies.splice(0, 1).map(async (a) => {
+    const collabs = [...a.directors, ...a.writers, ...a.actors];
+    let temp = [];
+    Promise.all(
+      collabs.map(async (id) => {
+        const person = await Models.People.findById(id);
+        // Skip self
+        if (person._id !== id) {
+          temp = [...temp, ...freqCollabUpdate(person.collaborators, id)];
+        }
+      })
+    ).then((a) => {console.log(temp)});
+  });
+};
+
+const testing = [
+  { person: "John", count: 1 },
+  { person: "James", count: 3 },
+  { person: "Ron", count: 1 },
+];
+
 const start = async () => {
   // Connect to DB
   try {
@@ -355,6 +408,7 @@ const start = async () => {
   // updateWriterObjectId();
   // updateActorObjectId();
   // updateDirectorObjectId();
+  freqCollabs();
 };
 
 start();
