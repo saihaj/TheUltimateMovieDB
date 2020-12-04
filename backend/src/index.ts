@@ -17,6 +17,8 @@ const startServer = async () => {
     process.exit( 126 )
   }
 
+  mongoose.set( 'debug', true )
+
   app.use( middleware )
   app.use( apiRoutes )
 
