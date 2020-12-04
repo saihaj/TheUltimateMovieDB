@@ -73,6 +73,8 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
     - Returns a movie
   - `/:movie/reviews`
     - Returns array of reviews. See [movie review schema](./src/models/movie.ts).
+  - `/rating/:movie`
+    - Returns array of reviews. See [movie rating schema](./src/models/movie.ts).
 
 ### POST
 - `movies`
@@ -133,3 +135,11 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
   - `/:userId/role`
     - Updates the role of user
     - Returns success message from mongo and new role that is updated
+- `movies`
+  - `/rating`
+    - `/upvote/:movie`
+      - Upvote a movie
+      - Returns [movie rating schema](./src/models/movie.ts) or message if already voted
+    - `/downvote/:movie`
+      - Downvote a movie
+      - Returns [movie rating schema](./src/models/movie.ts) or message if already voted

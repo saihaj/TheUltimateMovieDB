@@ -6,6 +6,8 @@ import Models from '../../models'
 import dataset from '../../movie-data'
 import { NumChecking, EscapeRegex, GetItemById, DnE } from '../../utils/db'
 
+import Ratings from './ratings'
+
 const router = Router()
 
 type SearchParamMovies = {
@@ -120,5 +122,7 @@ router.get( '/:movie/reviews', async ( { params: { movie } }, res, next ) => {
     return next( DnE( movie ) )
   } catch ( err ) { return next( err ) }
 } )
+
+router.use( '/rating', Ratings )
 
 export default router
