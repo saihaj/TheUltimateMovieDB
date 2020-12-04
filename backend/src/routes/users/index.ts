@@ -3,10 +3,10 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { omit } from 'lodash'
 
-import Models from '../models'
-import { DnE, GetItemById, GetAll } from '../utils/db'
-import { createToken } from '../utils/auth'
-import { JWT_SECRET, REFRESH_TOKEN_EXPIRY } from '../utils/consts'
+import Models from '../../models'
+import { DnE, GetItemById, GetAll } from '../../utils/db'
+import { createToken } from '../../utils/auth'
+import { JWT_SECRET, REFRESH_TOKEN_EXPIRY } from '../../utils/consts'
 
 const router = Router()
 
