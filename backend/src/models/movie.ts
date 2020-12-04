@@ -27,7 +27,7 @@ const MovieSchema = new Schema( {
     },
   ],
   meta: ObjectReference( 'MovieMeta' ),
-  // reviews: ObjectReference( 'MovieReview' ),
+  reviews: [ ObjectReference( 'MovieReview' ) ],
   // ratings: ObjectReference( 'MovieRating' ),
   // directors: [ String ],
   // actors: [ String ],
@@ -46,9 +46,11 @@ const VotesType = {
 
 const MovieReviewSchema = new Schema( {
   user: ObjectReference( 'User' ),
-  comment: String,
-  downvotes: VotesType,
-  upvotes: VotesType,
+  movie: ObjectReference( 'Movie' ),
+  comment: {
+    type: String,
+    required: true,
+  },
 } )
 
 export const MovieReviewModel = model( 'MovieReview', MovieReviewSchema );
