@@ -18,7 +18,7 @@ const HomePage:FC<PageProps> = () => (
 
           <div className="pt-4">
             <LinkButton to="search" label="Search Movie" customStyles="md:mr-16 mr-2" />
-            <LinkButton to="movies" label="Random Movie" />
+            <LinkButton to={`movies?offset=${Math.round( Math.random() * 8500 )}`} label="Random Movie" />
           </div>
 
         </div>
