@@ -41,8 +41,6 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
   - Following fields should be returned by all endpoints in this route. Check for exceptions or additional fields for that route.
   - Most accurate object return type in [people model](./src/models/people.ts)
   - `/`:
-    - Returns and array of people objects
-    - `/:personId`
       - Query params accepted
         - name
         - limit
@@ -50,7 +48,12 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
           - max: 50
         - offset
           - default: 0
-      - Returns a people object
+    - Returns and array of people objects
+    - `/:personId`
+      - Returns
+        - `_id`
+        - `name`
+        - `[movies]`
 
 - `movies`
   - Following fields should be returned by all endpoints in this route. Check for exceptions or additional fields for that route.

@@ -1,9 +1,12 @@
-import { Router } from 'express';
+/* eslint-disable no-underscore-dangle */
+import { uniq } from 'lodash'
+import { Router } from 'express'
+import { Types } from 'mongoose'
 
-import Models from '../models';
-import { DnE, GetItemById, NumChecking, EscapeRegex, NextOffset } from '../utils/db';
+import Models from '../models'
+import { DnE, GetItemById, NumChecking, EscapeRegex, NextOffset } from '../utils/db'
 
-const router = Router();
+const router = Router()
 
 type SearchParamPeople = {
   name?: String | RegExp;
@@ -55,7 +58,20 @@ router.get( '/', async ( { query }, res, next ) => {
 router.get( '/:personId', async ( { params: { personId } }, res, next ) => {
   try {
     const person = await GetItemById( Models.People, personId )
-    if ( person ) return res.json( person );
+
+    if ( person ) {
+      const moviesSet = new Set()
+
+      ;[ ...person.director, ...person.writer, ...person.actor ]
+        .map( ( id ) => moviesSet.add( id.toString() ) )
+
+      const tempMovies = await Promise.all(
+        [ ...moviesSet ].map( async ( id ) => Models.MovieModel.findById( id ) ),
+      )
+
+      return res.json( { name: person.name, movies: tempMovies, _id: person._id } )
+    }
+
     return next( DnE( personId ) );
   } catch ( err ) { return next( err ) }
 } )
