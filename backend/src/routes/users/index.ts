@@ -8,6 +8,8 @@ import { createToken } from '../../utils/auth'
 import { JWT_SECRET, REFRESH_TOKEN_EXPIRY } from '../../utils/consts'
 
 import Tokens from './token'
+import Follow from './follow'
+import UnFollow from './unfollow'
 
 const router = Router()
 
@@ -110,5 +112,37 @@ router.post( '/login', async ( { body }, res, next ) => {
 } )
 
 router.use( '/token', Tokens )
+
+router.use( '/follow', Follow )
+
+router.use( '/unfollow', UnFollow )
+
+/**
+ * Get all the followers for a given user
+ */
+router.get( '/followers/:userId', async ( { params: { userId } }, res, next ) => {
+  try {
+    const user = await Models.User.findById( userId )
+      .select( 'followers name' )
+      .populate( 'followers' )
+
+    if ( user ) return res.json( user )
+    return next( DnE( userId ) )
+  } catch ( err ) { return next( err ) }
+} )
+
+/**
+ * Get all the following for a given user
+ */
+router.get( '/following/:userId', async ( { params: { userId } }, res, next ) => {
+  try {
+    const user = await Models.User.findById( userId )
+      .select( 'followingUser followingPeople name' )
+      .populate( 'followingUser followingPeople' )
+
+    if ( user ) return res.json( user )
+    return next( DnE( userId ) )
+  } catch ( err ) { return next( err ) }
+} )
 
 export default router

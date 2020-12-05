@@ -24,6 +24,9 @@ const UserSchema = new Schema( {
     type: String,
     required: true,
   },
+  followingUser: [ ObjectReference( 'User', false ) ],
+  followingPeople: [ ObjectReference( 'People', false ) ],
+  followers: [ ObjectReference( 'User', false ) ],
   moviesLoved: [ ObjectReference( 'Movie', false ) ],
   moviesHates: [ ObjectReference( 'Movie', false ) ],
 } )

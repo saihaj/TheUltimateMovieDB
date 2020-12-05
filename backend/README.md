@@ -35,6 +35,10 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
     - Returns an array all users
   - `/:userId`
     - Returns a user given an ID
+  - `/followers/:userId`
+    - Returns name and followers fo given user.
+  - `/following/:userId`
+    - Returns name, followingPeople and followingUser for given user.
 
 - `people`
 
@@ -113,6 +117,7 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
           - `director: [MovieObjectId]`
           - `actor: [MovieObjectId]`
           - `writer: [MovieObjectId]`
+
 - `users`
   - `/`
     - You must specify the following fields. Returns the object create. Most accurate object return type in [users model](./src/models/user.ts)
@@ -140,7 +145,24 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
     - You must give a JWT
       - `token`
     - This will decode the JWT token
-
+  - `/follow`
+    - `/user/:personId`
+      - Returns a message if follow was success
+      - Required Fields
+        - `userId`: User to follow
+    - `/people/:personId`
+      - Returns a message if follow was success
+      - Required Fields
+        - `personId`: Person to follow
+  - `/unfollow`
+    - `/user/:personId`
+      - Returns a message if unfollow was success
+      - Required Fields
+        - `userId`: User to unfollow
+    - `/people/:personId`
+      - Returns a message if unfollow was success
+      - Required Fields
+        - `personId`: Person to unfollow
 ### PATCH
 
 - `users`
