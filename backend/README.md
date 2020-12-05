@@ -39,23 +39,23 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
 - `people`
 
   - Following fields should be returned by all endpoints in this route. Check for exceptions or additional fields for that route.
-    - `_id`
-    - `name`
-    - `director: [ MovieObjectId ]`
-    - `writer: [ MovieObjectId ]`
-    - `actor: [ MovieObjectId ]`
+  - Most accurate object return type in [people model](./src/models/people.ts)
   - `/`:
     - Returns and array of people objects
     - `/:personId`
+      - Query params accepted
+        - name
+        - limit
+          - default: 10
+          - max: 50
+        - offset
+          - default: 0
       - Returns a people object
-      -
 
 - `movies`
-
   - Following fields should be returned by all endpoints in this route. Check for exceptions or additional fields for that route.
   - Most accurate object return type in [movie model](./src/models/movie.ts)
   - `/`
-
     - Query params accepted
       - title
       - genre
@@ -67,7 +67,6 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
       - offset
         - default: 0
     - Returns
-
       - ```json
         {
           "info": {
@@ -77,16 +76,13 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
           "results": [movie]
         }
         ```
-
     - Movies are returned in ascending order as in DB
-
   - `/:movie`
     - Returns a movie
   - `/reviews/:movie`
     - Returns array of reviews. See [movie review schema](./src/models/movie.ts).
   - `/rating/:movie`
     - Returns array of reviews. See [movie rating schema](./src/models/movie.ts).
-
 ### POST
 
 - `movies`

@@ -68,3 +68,12 @@ export const NumChecking = ( input:number, def:number, max?: number ) => {
  * @param text input to process
  */
 export const EscapeRegex = ( text:string ) => text.replace( /[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&' )
+
+/**
+ * Return next offset
+ * @param upperbound
+ * @param limit
+ * @param offset
+ */
+export const NextOffset = ( upperbound: number, limit: number, offset: number ) => (
+  ( offset + limit < upperbound ) ? offset + limit : upperbound )

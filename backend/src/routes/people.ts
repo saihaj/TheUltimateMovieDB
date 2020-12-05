@@ -1,18 +1,52 @@
-import { Router } from 'express'
+import { Router } from 'express';
 
-import Models from '../models'
-import { DnE, GetItemById, GetAll } from '../utils/db'
+import Models from '../models';
+import { DnE, GetItemById, NumChecking, EscapeRegex, NextOffset } from '../utils/db';
 
-const router = Router()
+const router = Router();
+
+type SearchParamPeople = {
+  name?: String | RegExp;
+};
 
 /**
  * Get all people
+ * Search params supported
+ *   - name
+ * query params
+ *    - limit: default 10 max 50
+ *    - offset: default 0
+ * Sorted in Ascending order
  */
-router.get( '/', async ( _, res, next ) => {
+router.get( '/', async ( { query }, res, next ) => {
   try {
-    const person = await GetAll( Models.People )
-    return res.json( person );
-  } catch ( err ) { return next( err ) }
+    const limit = NumChecking( parseInt( query.limit as string, 10 ), 10, 50 )
+    const offset = NumChecking( parseInt( query.offset as string, 10 ), 0 )
+
+    const searchParams: SearchParamPeople = {}
+
+    if ( query.name ) {
+      searchParams.name = new RegExp( EscapeRegex( query.name as string ), 'gi' )
+    }
+
+    const people = await Models.People.find( searchParams, null, {
+      sort: { name: 1 },
+      skip: offset,
+      limit,
+    } )
+
+    const upperbound = await Models.People.count()
+
+    return res.json( {
+      info: {
+        limit,
+        nextOffset: NextOffset( upperbound, limit, offset ),
+      },
+      results: people,
+    } )
+  } catch ( err ) {
+    return next( err )
+  }
 } )
 
 /**
