@@ -4,7 +4,7 @@ import { v4 } from 'uuid';
 
 import Models from '../../models';
 import dataset from '../../movie-data';
-import { NumChecking, EscapeRegex, GetItemById, DnE } from '../../utils/db';
+import { NumChecking, EscapeRegex, GetItemById, DnE, NextOffset } from '../../utils/db';
 
 import Ratings from './ratings';
 import Reviews from './review';
@@ -15,7 +15,7 @@ type SearchParamMovies = {
   year?: string;
   title?: string | RegExp;
   genre?: string;
-  'score.average'?: { $gte: Number };
+  'score.average'?: { $gte: number };
 };
 
 /**
@@ -62,10 +62,12 @@ router.get( '/', async ( { query }, res, next ) => {
       limit,
     } ).populate( 'meta directors' );
 
+    const upperbound = await Models.MovieModel.count()
+
     return res.json( {
       info: {
         limit,
-        nextOffset: offset + limit,
+        nextOffset: NextOffset( upperbound, limit, offset ),
       },
       results: movies,
     } );
