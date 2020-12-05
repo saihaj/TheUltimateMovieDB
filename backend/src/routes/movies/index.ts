@@ -81,6 +81,42 @@ router.post( '/', ( { body }, res ) => {
   res.status( 200 ).json( { message: 'Successfully added the movie' } )
 } )
 
+/**
+ * Score a movie
+ * For Return type of object see `MovieSchema`
+ */
+router.patch( '/score/:movie', async ( { params: { movie }, body }, res, next ) => {
+  if ( !body.score ) return next( { message: '`score` is a required field.', status: 412 } );
+  if ( body.score > 10 || body.score < 0 ) return next( { message: '`score` needs to be between 0-10.', status: 412 } );
+
+  try {
+    const movieObj = await GetItemById( Models.MovieModel, movie )
+
+    if ( movieObj ) {
+      const newScore = movieObj.score.total + +body.score;
+      const newCounter = movieObj.score.count + 1;
+      const newAvg = newScore / newCounter;
+
+      await Models.MovieModel.findByIdAndUpdate(
+        { _id: movie },
+        {
+          $set: {
+            score: {
+              total: newScore,
+              count: newCounter,
+              average: newAvg,
+            },
+          },
+        },
+      ).exec();
+
+      return res.json( { message: `Average score is ${newAvg}` } );
+    }
+
+    return next( { message: `${movie} does not exist`, status: 404 } );
+  } catch ( err ) { return next( err ); }
+} );
+
 router.use( '/rating', Ratings )
 router.use( '/review', Reviews )
 

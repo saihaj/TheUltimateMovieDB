@@ -2,6 +2,24 @@ import { Schema, model } from 'mongoose';
 
 import { ObjectReference } from '../utils/db';
 
+const MovieScore = {
+  total: {
+    type: Number,
+    default: 0,
+    required: true,
+  },
+  count: {
+    type: Number,
+    default: 0,
+    required: true,
+  },
+  average: {
+    type: Number,
+    default: 0,
+    required: true,
+  },
+}
+
 const MovieSchema = new Schema( {
   title: {
     type: String,
@@ -35,6 +53,7 @@ const MovieSchema = new Schema( {
   directors: [ ObjectReference( 'People' ) ],
   actors: [ ObjectReference( 'People' ) ],
   writers: [ ObjectReference( 'People' ) ],
+  score: MovieScore,
 } )
 
 export const MovieModel = model( 'Movie', MovieSchema )
