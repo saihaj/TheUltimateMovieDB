@@ -62,6 +62,7 @@ router.get( '/', async ( { query }, res, next ) => {
       limit,
     } ).populate( 'meta directors' );
 
+    // @ts-expect-error just counting all docs
     const upperbound = await Models.MovieModel.count()
 
     return res.json( {
@@ -82,10 +83,10 @@ router.get( '/', async ( { query }, res, next ) => {
  */
 router.get( '/:movie', async ( { params: { movie } }, res, next ) => {
   try {
-    // @ts-expect-error populate type errors
     const movieObj = await GetItemById(
       Models.MovieModel,
       movie,
+      // @ts-expect-error populate type errors
       'directors actors writers',
     );
     if ( movieObj ) return res.json( movieObj );

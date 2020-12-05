@@ -105,7 +105,7 @@ router.post( '/login', async ( { body }, res, next ) => {
     // Can be useful in frontend
     res.cookie( 'user-role', role )
 
-    res.json( { ...retrievedUser.toJSON(), token } )
+    return res.json( { ...retrievedUser.toJSON(), token } )
   } catch ( err ) { return new Error( err ) }
 } )
 

@@ -1,7 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { uniq } from 'lodash'
 import { Router } from 'express'
-import { Types } from 'mongoose'
 
 import Models from '../models'
 import { DnE, GetItemById, NumChecking, EscapeRegex, NextOffset } from '../utils/db'
@@ -38,6 +36,7 @@ router.get( '/', async ( { query }, res, next ) => {
       limit,
     } )
 
+    // @ts-expect-error just counting all docs
     const upperbound = await Models.People.count()
 
     return res.json( {
