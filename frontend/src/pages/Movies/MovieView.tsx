@@ -1,11 +1,14 @@
-import React, { FC } from 'react'
+import React, { FC, useContext } from 'react'
 import { useParams, Link } from '@reach/router'
 import useSWR from 'swr'
-// @ts-expect-error ignore types for this
+import { AiTwotoneDislike, AiTwotoneLike } from 'react-icons/ai'
+import ReactStars from 'react-rating-stars-component'
 import ReactJoin from 'react-join'
+import { useToasts } from 'react-toast-notifications'
 
 import { PageProps } from '../../lib/types'
 import Layout from '../../components/Layout'
+import { AuthContext } from '../../lib/auth'
 
 type PeopleNamesProps = {
   list: [{ _id: string; name: string }];
@@ -29,38 +32,106 @@ const PeopleNames = ( { list }: PeopleNamesProps ) => (
   </ReactJoin>
 )
 
+const Reaction = () => {
+  const {
+    state: { userId },
+  } = useContext( AuthContext )
+  const { movieId } = useParams()
+  const { addToast } = useToasts()
+
+  const makeApiCall = async ( type: 'upvote' | 'downvote' ) => {
+    const res = await (
+      await fetch( `/api/movies/rating/${type}/${movieId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify( {
+          user: userId,
+        } ),
+      } )
+    ).json()
+
+    addToast( res.message, {
+      appearance: res.error >= 400 ? 'error' : 'info',
+      autoDismiss: true,
+    } )
+  }
+  return (
+    <>
+      <AiTwotoneLike
+        className="hover:text-yellow-400"
+        style={{ cursor: 'pointer' }}
+        size={30}
+        onClick={() => makeApiCall( 'upvote' )}
+      />
+      <AiTwotoneDislike
+        className="hover:text-yellow-400"
+        style={{ cursor: 'pointer' }}
+        size={30}
+        onClick={() => makeApiCall( 'downvote' )}
+      />
+    </>
+  )
+}
+
 const MovieComponent = ( {
   title,
   posterUrl,
   directors,
   actors,
   writers,
-}: MovieComponentProps ) => (
-  <div className="md:flex">
-    <img
-      alt={`Posted of ${title}`}
-      src={posterUrl}
-      className="lg:w-1/2 md:w-2/5 w-4/6 rounded-lg mx-auto md:mx-0 md:pr-10"
-    />
-    <div className="flex flex-col my-auto text-center md:text-left">
-      <h1 className="text-5xl font-bold">{title}</h1>
-      <h3 className="text-2xl font-medium">
-        <b>Director: </b>
-        <PeopleNames list={directors} />
-        <br />
-        <b>Actors: </b>
-        <PeopleNames list={actors} />
-        <br />
-        <b>Writers: </b>
-        <PeopleNames list={writers} />
-      </h3>
+}: MovieComponentProps ) => {
+  const {
+    state: { isAuthenticated },
+  } = useContext( AuthContext )
+  return (
+    <div className="md:flex">
+      <img
+        alt={`Posted of ${title}`}
+        src={posterUrl}
+        className="lg:w-1/2 md:w-2/5 w-4/6 rounded-lg mx-auto md:mx-0 md:pr-10"
+      />
+      <div className="flex flex-col my-auto text-center md:text-left">
+        <div className="flex justify-center pt-4 md:justify-start md:pt-0">
+          {isAuthenticated && <Reaction />}
+        </div>
+
+        <h1 className="text-5xl font-bold">{title}</h1>
+        <h3 className="text-2xl font-medium">
+          <b>Director: </b>
+          <PeopleNames list={directors} />
+          <br />
+          <b>Actors: </b>
+          <PeopleNames list={actors} />
+          <br />
+          <b>Writers: </b>
+          <PeopleNames list={writers} />
+        </h3>
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 const MovieView: FC<PageProps> = () => {
   const { movieId } = useParams()
   const { data, error } = useSWR( `/api/movies/${movieId}` )
+  const { state: { isAuthenticated } } = useContext( AuthContext )
+
+  const setReview = async ( score:number ) => {
+    if ( isAuthenticated ) {
+      await ( await fetch( `/api/movies/score/${movieId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify( {
+          score,
+        } ),
+      } ) ).json()
+    }
+  }
+
   return (
     <Layout nav>
       {!error && !data && <div>Loading...</div>}
@@ -69,16 +140,33 @@ const MovieView: FC<PageProps> = () => {
         We have a problem! Movie not found
       </h1>
       )}
+
       {data && (
-      <div className="max-w-3xl mx-auto pt-32">
-        <MovieComponent
-          title={data.title}
-          posterUrl={data.poster}
-          directors={data.directors}
-          actors={data.actors}
-          writers={data.writers}
-        />
-      </div>
+        <>
+          <div className="max-w-3xl mx-auto pt-32">
+            <MovieComponent
+              title={data.title}
+              posterUrl={data.poster}
+              directors={data.directors}
+              actors={data.actors}
+              writers={data.writers}
+            />
+          </div>
+
+          <div className="flex justify-between max-w-3xl mx-auto pt-8">
+            <h4 className="text-2xl text-gray-400">Rating</h4>
+            <div className="pl-2">
+              <ReactStars
+                count={10}
+                value={Math.round( data.score.average )}
+                onChange={( newRating: number ) => setReview( newRating )}
+                size={35}
+                activeColor="#f6e05e"
+                color="#6562e3"
+              />
+            </div>
+          </div>
+        </>
       )}
     </Layout>
   )
