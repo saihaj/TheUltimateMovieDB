@@ -1,6 +1,7 @@
+/* eslint-disable no-underscore-dangle */
 import React, { FC, useContext, useState } from 'react'
 import { useParams, Link } from '@reach/router'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import { AiTwotoneDislike, AiTwotoneLike } from 'react-icons/ai'
 import ReactStars from 'react-rating-stars-component'
 import ReactJoin from 'react-join'
@@ -10,6 +11,7 @@ import { PageProps } from '../../lib/types'
 import Layout from '../../components/Layout'
 import { AuthContext } from '../../lib/auth'
 import ActionButton from '../../components/ProfileActionButton'
+import MovieReview from '../../components/MovieReview'
 
 type PeopleNamesProps = {
   list: [{ _id: string; name: string }];
@@ -98,6 +100,7 @@ const WriteReview = () => {
 
       setReview( '' )
       setGivenReview( true )
+      mutate( `/api/movies/review/${movieId}` )
 
       addToast( res.error >= 400 ? res.message : 'Thanks for the review!', {
         appearance: res.error >= 400 ? 'error' : 'info',
@@ -178,6 +181,7 @@ const MovieView: FC<PageProps> = () => {
   const { movieId } = useParams()
   const { data, error } = useSWR( `/api/movies/${movieId}` )
   const { state: { isAuthenticated } } = useContext( AuthContext )
+  const { data: reviewsData } = useSWR( `/api/movies/review/${movieId}` )
 
   const setReview = async ( score:number ) => {
     if ( isAuthenticated ) {
@@ -204,7 +208,7 @@ const MovieView: FC<PageProps> = () => {
 
       {data && (
         <>
-          <div className="max-w-3xl mx-auto pt-32">
+          <div className="max-w-3xl mx-auto pt-16">
             <MovieComponent
               title={data.title}
               posterUrl={data.poster}
@@ -227,7 +231,26 @@ const MovieView: FC<PageProps> = () => {
               />
             </div>
           </div>
+
           {isAuthenticated && <WriteReview />}
+
+          <div className="pt-10 pb-4">
+            {reviewsData && reviewsData.length > 0 && (
+              <>
+                <h2 className="text-3xl pb-2 text-center">User Reviews</h2>
+                <div className="overflow-y-scroll h-48">
+                  {reviewsData.map( ( a:{
+                    _id: string;
+                    comment: string,
+                    user:{_id:string, name:string}
+                } ) => (
+                  <MovieReview key={a._id} comment={a.comment} user={a.user} />
+                  ) )}
+                </div>
+              </>
+            )}
+          </div>
+
         </>
       )}
     </Layout>
