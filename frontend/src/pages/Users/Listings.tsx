@@ -1,10 +1,13 @@
-import React, { FC } from 'react'
-import { Link } from '@reach/router'
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+import React, { FC, useState, useEffect, useRef } from 'react'
+import { Link, navigate } from '@reach/router'
 import cx from 'clsx'
 import useSwr from 'swr'
 
 import { PageProps } from '../../lib/types'
 import Layout from '../../components/Layout'
+import useQuery from '../../hooks/use-query'
 
 type UserCardProps = {
   name: string
@@ -26,7 +29,6 @@ const UserCard = ( { userId, name }: UserCardProps ) => (
         <div style={{ height: 'inherit' }} className="flex flex-col justify-between">
 
           <h1 className="text-3xl font-bold text-center">{name}</h1>
-          <img src="https://via.placeholder.com/200" alt="Dummy profile Pic" />
 
         </div>
       </div>
@@ -37,10 +39,21 @@ const UserCard = ( { userId, name }: UserCardProps ) => (
 )
 
 const Listings: FC<PageProps> = () => {
-  const { data } = useSwr( '/api/people' )
+  const offset = useState( useQuery( 'offset' ) || 0 )
+  const queryString = useRef( '/api/people?limit=48' )
+  const [ mounted, setMounted ] = useState( false )
+
+  useEffect( () => {
+    const cleanQueryParam = () => `/api/people?limit=48&offset=${offset}`
+    queryString.current = cleanQueryParam()
+    setMounted( true )
+  }, [ offset, mounted ] )
+
+  const { data } = useSwr( mounted ? queryString.current : null )
 
   return (
     <Layout nav>
+
       {!data && <div>Loading...</div>}
       {data?.error && <h1 className="text-center text-3xl pt-16">We have a problem!</h1>}
 
@@ -49,10 +62,25 @@ const Listings: FC<PageProps> = () => {
           <h1 className="text-center text-3xl py-8 font-semibold">Listing of Directors/Writers/Actors</h1>
           <div className="md:flex md:flex-wrap">
             {/* @ts-expect-error */}
-            {data.map( ( { _id: id, name } ) => (
+            {data.results.map( ( { _id: id, name } ) => (
               <UserCard key={id} userId={id} name={name} />
             ) )}
           </div>
+
+          <div
+            className="text-center text-4xl mx-auto py-2 hover:text-yellow-400"
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              const url = new URL( window.location.href )
+              url.searchParams.set( 'offset', data.info.nextOffset )
+              navigate( `${url.pathname}${url.search}`, { replace: true } )
+              // eslint-disable-next-line no-restricted-globals
+              location.reload()
+            }}
+          >
+            Next
+          </div>
+
         </>
       )}
 
