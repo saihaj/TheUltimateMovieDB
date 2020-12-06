@@ -41,29 +41,8 @@ const FollowUser = () => {
 
   return (
     <div className="flex justify-center">
-      <button
-        type="button"
-        className={clsx(
-          'bg-gray-400 text-indigo-800',
-          'px-6 py-1 rounded-lg',
-          'hover:bg-yellow-400',
-          'mr-10',
-        )}
-        onClick={() => makeApiCall( 'follow' )}
-      >
-        Follow
-      </button>
-      <button
-        type="button"
-        className={clsx(
-          'bg-gray-400 text-indigo-800',
-          'px-4 py-1 rounded-lg',
-          'hover:bg-yellow-400',
-        )}
-        onClick={() => makeApiCall( 'unfollow' )}
-      >
-        Unfollow
-      </button>
+      <ActionButton action={() => makeApiCall( 'follow' )} label="Follow" customStyle="px-6 mr-8" />
+      <ActionButton action={() => makeApiCall( 'unfollow' )} label="Unfollow" />
     </div>
   )
 }
