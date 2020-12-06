@@ -148,6 +148,11 @@ const UserProfile: FC<PageProps> = () => {
         </div>
         )}
 
+        <div className="flex justify-center pt-2">
+          <LinkButton to="followers" label="Followers" customStyles="mr-6" />
+          <LinkButton to="following" label="Following" />
+        </div>
+
         <div className="flex flex-col md:flex-row justify-around">
           { loved && loved.moviesLoved.length > 0 && <MovieListingBox label="Recently Likes" movies={loved.moviesLoved} />}
           { hated && hated.moviesHates.length > 0 && <MovieListingBox label="Recently Disliked" movies={hated.moviesHates} />}
