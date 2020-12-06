@@ -51,7 +51,7 @@ router.patch( '/upvote/:movie', async ( { params: { movie }, body }, res, next )
           { $push: { moviesLoved: movieObj._id } },
         ).exec()
 
-        return res.json( rating )
+        return res.json( { message: `Thanks for liking ${movieObj.title}` } )
       }
 
       const didDownvote = await Models.MovieRatingsModel
@@ -129,7 +129,7 @@ router.patch( '/downvote/:movie', async ( { params: { movie }, body }, res, next
           { $push: { moviesHates: movieObj._id } },
         ).exec()
 
-        return res.json( rating )
+        return res.json( { message: `We hope you find peace after disliking ${movieObj.title}` } )
       }
 
       const didUpvote = await Models.MovieRatingsModel
