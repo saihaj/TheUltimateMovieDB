@@ -13,8 +13,9 @@ const router = Router()
 router.post( '/:movie', async ( { params: { movie }, body }, res, next ) => {
   try {
     const movieObj = await GetItemById( Models.MovieModel, movie )
+    const user = await GetItemById( Models.User, body.user )
 
-    if ( movieObj ) {
+    if ( movieObj && user ) {
       const review = await new Models.MovieReviewModel(
         { user: body.user, comment: body.comment, movie: movieObj._id },
       ).save()
@@ -24,10 +25,17 @@ router.post( '/:movie', async ( { params: { movie }, body }, res, next ) => {
         { $push: { reviews: review } },
       ).exec()
 
+      // Notify followers
+      await Promise.all( user.followers.map( async ( id:string ) => new Models.Notifications( {
+        to: id,
+        message: `${user.name} just added a review for ${movieObj.title}`,
+        movie: movieObj._id,
+      } ).save() ) );
+
       return res.json( review )
     }
 
-    return next( DnE( movie ) );
+    return next( DnE( 'Provided Movie or User' ) );
   } catch ( err ) { return next( err ) }
 } )
 
