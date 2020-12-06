@@ -23,6 +23,7 @@ type MovieComponentProps = {
   directors: PeopleNamesProps['list'];
   actors: PeopleNamesProps['list'];
   writers: PeopleNamesProps['list'];
+  genre: [string];
 };
 
 const PeopleNames = ( { list }: PeopleNamesProps ) => (
@@ -145,6 +146,7 @@ const MovieComponent = ( {
   directors,
   actors,
   writers,
+  genre,
 }: MovieComponentProps ) => {
   const {
     state: { isAuthenticated },
@@ -171,6 +173,11 @@ const MovieComponent = ( {
           <br />
           <b>Writers: </b>
           <PeopleNames list={writers} />
+          <br />
+          <b>Genre: </b>
+          <ReactJoin separator={<span>, </span>}>
+            {genre.map( a => <Link className="hover:text-yellow-400" to={`/movies?genre=${a}`}>{a}</Link> )}
+          </ReactJoin>
         </h3>
       </div>
     </div>
@@ -215,6 +222,7 @@ const MovieView: FC<PageProps> = () => {
               directors={data.directors}
               actors={data.actors}
               writers={data.writers}
+              genre={data.genre}
             />
           </div>
 
