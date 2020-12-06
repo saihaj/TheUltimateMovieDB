@@ -22,8 +22,11 @@
     "jwt-decode": "^3.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-icons": "^4.1.0",
     "react-join": "^1.1.4",
+    "react-rating-stars-component": "^2.2.0",
     "react-scripts": "3.4.3",
+    "react-toast-notifications": "^2.4.0",
     "swr": "^0.3.6",
     "yup": "^0.29.3"
   },
