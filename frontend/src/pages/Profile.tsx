@@ -6,6 +6,7 @@ import useSWR, { mutate } from 'swr'
 import clsx from 'clsx'
 // @ts-expect-error missing types
 import title from 'title'
+import { useToasts } from 'react-toast-notifications'
 
 import { PageProps } from '../lib/types'
 import Layout from '../components/Layout'
@@ -15,6 +16,57 @@ import { AuthContext, AUTH_ACTIONS, parseCookies } from '../lib/auth'
 type MovieListingBoxProps = {
   label: string,
   movies:[{_id: string, title: string}]
+}
+
+const FollowUser = () => {
+  const { state: { userId: loggedInUserId } } = useContext( AuthContext )
+  const { userId } = useParams()
+  const { addToast } = useToasts()
+
+  const makeApiCall = async ( type: 'follow'| 'unfollow' ) => {
+    const res = await ( await fetch( `/api/users/${type}/user/${loggedInUserId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify( {
+        userId,
+      } ),
+    } ) ).json()
+
+    addToast( res.message, {
+      appearance: res.error >= 400 ? 'error' : 'info',
+      autoDismiss: true,
+    } )
+  }
+
+  return (
+    <div className="flex justify-center">
+      <button
+        type="button"
+        className={clsx(
+          'bg-gray-400 text-indigo-800',
+          'px-6 py-1 rounded-lg',
+          'hover:bg-yellow-400',
+          'mr-10',
+        )}
+        onClick={() => makeApiCall( 'follow' )}
+      >
+        Follow
+      </button>
+      <button
+        type="button"
+        className={clsx(
+          'bg-gray-400 text-indigo-800',
+          'px-4 py-1 rounded-lg',
+          'hover:bg-yellow-400',
+        )}
+        onClick={() => makeApiCall( 'unfollow' )}
+      >
+        Unfollow
+      </button>
+    </div>
+  )
 }
 
 const MovieListingBox = ( { label, movies }:MovieListingBoxProps ) => (
@@ -116,7 +168,7 @@ const UserProfile: FC<PageProps> = () => {
   const { data } = useSWR( `/api/users/${userId}` )
   const { data: loved } = useSWR( data && `/api/users/liked/${userId}` )
   const { data: hated } = useSWR( data && `/api/users/hated/${userId}` )
-  const { state: { isAuthenticated, role } } = useContext( AuthContext )
+  const { state: { isAuthenticated, role, userId: loggedInUserId } } = useContext( AuthContext )
 
   useEffect( () => {
     mutate( `/api/users/${userId}` )
@@ -128,15 +180,29 @@ const UserProfile: FC<PageProps> = () => {
       {data?.error && <h1 className="text-center text-3xl pt-16">We have a problem! User not found</h1>}
       {!data?.error && data && (
       <>
+
         <UserDataFetch name={data.name} userRole={data.role} />
+
+        {isAuthenticated && loggedInUserId !== userId && (
+        <div className="flex justify-center pt-2">
+          <FollowUser />
+        </div>
+        )}
+
         <div className="flex flex-col md:flex-row justify-around">
           { loved && loved.moviesLoved.length > 0 && <MovieListingBox label="Recently Likes" movies={loved.moviesLoved} />}
           { hated && hated.moviesHates.length > 0 && <MovieListingBox label="Recently Disliked" movies={hated.moviesHates} />}
         </div>
+
         <div className="flex flex-col md:flex-row justify-around">
-          {isAuthenticated && <ProfileEditOptions />}
-          {role === 'contributing' && <ContributorEditOptions />}
+          {isAuthenticated && (
+            <>
+              <ProfileEditOptions />
+              {role === 'contributing' && <ContributorEditOptions />}
+            </>
+          )}
         </div>
+
       </>
       )}
     </Layout>

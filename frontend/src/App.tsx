@@ -12,6 +12,8 @@ const Login = lazy( () => import( './pages/Login' ) )
 const Profile = lazy( () => import( './pages/Profile' ) )
 const UserMePage = lazy( () => import( './pages/Me' ) )
 const People = lazy( () => import( './pages/Users' ) )
+const Followers = lazy( () => import( './pages/Followers' ) )
+const Following = lazy( () => import( './pages/Following' ) )
 
 /**
  * Setup Top-Level Routes for @reach/router
@@ -24,6 +26,8 @@ const NavigationRoutes = () => (
     <Register path="register" />
     <Login path="login" />
     <Profile path="profile/:userId" />
+    <Followers path="profile/:userId/followers" />
+    <Following path="profile/:userId/following" />
     <People path="people/*" />
     <UserMePage path="me" />
   </Router>
