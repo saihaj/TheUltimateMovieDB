@@ -37,7 +37,9 @@ router.post( '/:movie', async ( { params: { movie }, body }, res, next ) => {
  */
 router.get( '/:movie', async ( { params: { movie } }, res, next ) => {
   try {
-    const reviews = await Models.MovieReviewModel.find( { movie } ).populate( 'user' )
+    const reviews = await Models.MovieReviewModel
+      .find( { movie } )
+      .populate( 'user', 'name' )
 
     if ( reviews ) {
       if ( reviews.length >= 1 ) {

@@ -87,7 +87,7 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
   - `/:movie`
     - Returns a movie
   - `/reviews/:movie`
-    - Returns array of reviews. See [movie review schema](./src/models/movie.ts).
+    - Returns array of reviews. Only name of user is sent. See [movie review schema](./src/models/movie.ts).
   - `/rating/:movie`
     - Returns array of reviews. See [movie rating schema](./src/models/movie.ts).
 ### POST
