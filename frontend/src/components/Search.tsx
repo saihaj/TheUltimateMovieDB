@@ -17,7 +17,7 @@ const SearchBox = ( { ...props }: SearchBoxProps ) => {
     if ( searchValue.length >= 2 && searchValue !== ' ' ) {
       fetch( `/api/movies?title=${searchValue}` )
         .then( res => res.json() )
-        .then( res => setResults( res ) )
+        .then( res => setResults( res.results ) )
     }
   }, [ searchValue ] )
 
@@ -45,6 +45,7 @@ const SearchBox = ( { ...props }: SearchBoxProps ) => {
             <Link className="hover:text-purple-900" to={`/movies/${a._id}`}>{a.title}</Link>
           </div>
         ) )}
+
       </div>
     </>
   )
