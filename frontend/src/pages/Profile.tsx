@@ -82,6 +82,7 @@ const ContributorEditOptions = () => (
   <div className="flex flex-col w-full mt-8 md:w-1/2 px-4">
     <h2 className="text-2xl pb-2">Contributing User Perks</h2>
     <LinkButton to="/people/create" label="Add new person" />
+    <LinkButton to="/movies/create" label="Add new movie" />
   </div>
 )
 

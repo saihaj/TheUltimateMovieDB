@@ -25,18 +25,9 @@ const MovieSchema = new Schema( {
     type: String,
     required: true,
   },
-  year: {
-    type: String,
-    required: true,
-  },
-  poster: {
-    type: String,
-    required: true,
-  },
-  production: {
-    type: String,
-    required: true,
-  },
+  year: String,
+  poster: String,
+  production: String,
   genre: [
     {
       type: String,
@@ -46,7 +37,7 @@ const MovieSchema = new Schema( {
   ],
   meta: ObjectReference( 'MovieMeta' ),
   reviews: [ ObjectReference( 'MovieReview' ) ],
-  ratings: ObjectReference( 'MovieRating' ),
+  ratings: ObjectReference( 'MovieRating', false ),
   // directors: [ String ],
   // actors: [ String ],
   // writers: [ String ],
