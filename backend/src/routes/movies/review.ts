@@ -43,7 +43,7 @@ router.get( '/:movie', async ( { params: { movie } }, res, next ) => {
 
     if ( reviews ) {
       if ( reviews.length >= 1 ) {
-        return res.json( reviews )
+        return res.json( reviews.reverse() )
       }
     }
 
