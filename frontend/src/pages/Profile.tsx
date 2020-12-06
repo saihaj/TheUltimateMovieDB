@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { FC, useContext, useEffect } from 'react'
 import { Link, useParams } from '@reach/router'
 import useSWR, { mutate } from 'swr'
@@ -12,6 +10,7 @@ import { PageProps } from '../lib/types'
 import Layout from '../components/Layout'
 import LinkButton from '../components/LinkButton'
 import { AuthContext, AUTH_ACTIONS, parseCookies } from '../lib/auth'
+import ActionButton from '../components/ProfileActionButton'
 
 type MovieListingBoxProps = {
   label: string,
@@ -103,25 +102,6 @@ const ContributorEditOptions = () => (
   <div className="flex flex-col w-full mt-8 md:w-1/2 px-4">
     <h2 className="text-2xl pb-2">Contributing User Perks</h2>
     <LinkButton to="/people/create" label="Add new person" />
-  </div>
-)
-
-type ActionButtonProps = {
-  action: () => void,
-  label: string
-}
-
-const ActionButton = ( { action, label }:ActionButtonProps ) => (
-  <div
-    className={clsx(
-      'bg-gray-400 text-indigo-800',
-      'px-4 py-1 rounded-lg',
-      'hover:bg-yellow-400',
-    )}
-    style={{ cursor: 'pointer' }}
-    onClick={action}
-  >
-    {label}
   </div>
 )
 
