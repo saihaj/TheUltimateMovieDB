@@ -10,6 +10,7 @@ import { JWT_SECRET, REFRESH_TOKEN_EXPIRY } from '../../utils/consts'
 import Tokens from './token'
 import Follow from './follow'
 import UnFollow from './unfollow'
+import Recommendations from './recommendations'
 
 const router = Router()
 
@@ -116,6 +117,8 @@ router.use( '/token', Tokens )
 router.use( '/follow', Follow )
 
 router.use( '/unfollow', UnFollow )
+
+router.use( '/recommendations', Recommendations )
 
 /**
  * Get all the followers for a given user

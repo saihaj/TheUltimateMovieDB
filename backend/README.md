@@ -39,6 +39,8 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
     - Returns name and followers fo given user.
   - `/following/:userId`
     - Returns name, followingPeople and followingUser for given user.
+  - `/recommendations/:userId`
+    - Returns 20 recommended movies for the user
 
 - `people`
 
