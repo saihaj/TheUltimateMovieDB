@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react'
+import React, { FC, useContext, useState } from 'react'
 import { useParams, Link } from '@reach/router'
 import useSWR from 'swr'
 import { AiTwotoneDislike, AiTwotoneLike } from 'react-icons/ai'
@@ -9,6 +9,7 @@ import { useToasts } from 'react-toast-notifications'
 import { PageProps } from '../../lib/types'
 import Layout from '../../components/Layout'
 import { AuthContext } from '../../lib/auth'
+import ActionButton from '../../components/ProfileActionButton'
 
 type PeopleNamesProps = {
   list: [{ _id: string; name: string }];
@@ -72,6 +73,66 @@ const Reaction = () => {
         onClick={() => makeApiCall( 'downvote' )}
       />
     </>
+  )
+}
+
+const WriteReview = () => {
+  const [ givenReview, setGivenReview ] = useState( false )
+  const [ review, setReview ] = useState( '' )
+  const { movieId } = useParams()
+  const { addToast } = useToasts()
+  const { state: { userId } } = useContext( AuthContext )
+
+  const submitReview = async () => {
+    if ( review.length > 0 ) {
+      const res = await ( await fetch( `/api/movies/review/${movieId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify( {
+          comment: review,
+          user: userId,
+        } ),
+      } ) ).json()
+
+      setReview( '' )
+      setGivenReview( true )
+
+      addToast( res.error >= 400 ? res.message : 'Thanks for the review!', {
+        appearance: res.error >= 400 ? 'error' : 'info',
+        autoDismiss: true,
+      } )
+    } else {
+      addToast( 'Please write something', {
+        appearance: 'error',
+        autoDismiss: true,
+      } )
+    }
+  }
+  return (
+    <div className="pt-8">
+      {givenReview && (
+        <h3 className="text-2xl text-center text-gray-400">
+          Thanks for writing the review
+        </h3>
+      )}
+      {!givenReview && (
+      <>
+        <textarea
+          placeholder="Write review"
+          value={review}
+          onChange={e => setReview( e.target.value )}
+          className="form-input mt-2 block w-full rounded-t-lg text-black bg-gray-400"
+        />
+        <ActionButton
+          label="Submit Review"
+          customStyle="rounded-t-none"
+          action={() => submitReview()}
+        />
+      </>
+      )}
+    </div>
   )
 }
 
@@ -166,6 +227,7 @@ const MovieView: FC<PageProps> = () => {
               />
             </div>
           </div>
+          {isAuthenticated && <WriteReview />}
         </>
       )}
     </Layout>
