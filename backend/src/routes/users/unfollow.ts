@@ -51,6 +51,7 @@ router.post( '/user/:userId', async ( { params: { userId }, body }, res, next ) 
  */
 router.post( '/person/:userId', async ( { params: { userId }, body }, res, next ) => {
   if ( !body.personId ) return next( { message: '`personId` is a required field.', status: 412 } );
+
   const { personId } = body
 
   try {
@@ -70,6 +71,12 @@ router.post( '/person/:userId', async ( { params: { userId }, body }, res, next 
         { _id: userId },
         { $pullAll: { followingPeople: [ personId ] } },
       )
+
+      // remove user from followers list of followPerson
+      await Models.People.findByIdAndUpdate(
+        { _id: personId },
+        { $pullAll: { followers: [ userId ] } },
+      );
 
       return res.json( { message: `${user.name} unfollowed ${followPerson.name}` } )
     }

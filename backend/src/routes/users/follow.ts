@@ -72,6 +72,12 @@ router.post( '/person/:userId', async ( { params: { userId }, body }, res, next 
         { $push: { followingPeople: personId } },
       )
 
+      // add user to follower list for followPerson
+      await Models.People.findByIdAndUpdate(
+        { _id: personId },
+        { $push: { followers: userId } },
+      );
+
       return res.json( { message: `${user.name} started following ${followPerson.name}` } )
     }
 
