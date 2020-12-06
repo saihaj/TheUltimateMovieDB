@@ -5,6 +5,11 @@ import { DnE, GetItemById } from '../../utils/db'
 
 const router = Router()
 
+/**
+ * Unfollow a user
+ * Required:
+ *  - userId: ObjectID of user to follow
+ */
 router.post( '/user/:userId', async ( { params: { userId }, body }, res, next ) => {
   if ( !body.userId ) return next( { message: '`userId` is a required field.', status: 412 } );
 
@@ -35,10 +40,15 @@ router.post( '/user/:userId', async ( { params: { userId }, body }, res, next ) 
       return res.json( { message: `${user.name} unfollowed ${followUser.name}` } )
     }
 
-    return next( DnE( userId ) )
+    return next( DnE( 'one of the user' ) )
   } catch ( err ) { return next( err ) }
 } )
 
+/**
+ * Unfollow a person
+ * Required:
+ *  - personId: ObjectID of person to follow
+ */
 router.post( '/person/:userId', async ( { params: { userId }, body }, res, next ) => {
   if ( !body.personId ) return next( { message: '`personId` is a required field.', status: 412 } );
   const { personId } = body
@@ -64,7 +74,7 @@ router.post( '/person/:userId', async ( { params: { userId }, body }, res, next 
       return res.json( { message: `${user.name} unfollowed ${followPerson.name}` } )
     }
 
-    return next( DnE( userId ) )
+    return next( DnE( 'user or person' ) )
   } catch ( err ) { return next( err ) }
 } )
 

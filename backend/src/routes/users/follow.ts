@@ -41,7 +41,7 @@ router.post( '/user/:userId', async ( { params: { userId }, body }, res, next ) 
       return res.json( { message: `${user.name} started following ${followUser.name}` } )
     }
 
-    return next( DnE( userId ) )
+    return next( DnE( 'one of the user' ) )
   } catch ( err ) { return next( err ) }
 } )
 
@@ -75,7 +75,7 @@ router.post( '/person/:userId', async ( { params: { userId }, body }, res, next 
       return res.json( { message: `${user.name} started following ${followPerson.name}` } )
     }
 
-    return next( DnE( userId ) )
+    return next( DnE( 'user or person' ) )
   } catch ( err ) { return next( err ) }
 } )
 
