@@ -145,4 +145,43 @@ router.get( '/following/:userId', async ( { params: { userId } }, res, next ) =>
   } catch ( err ) { return next( err ) }
 } )
 
+/**
+ * Get 5 movies liked by a given user
+ */
+router.get( '/liked/:userId', async ( { params: { userId } }, res, next ) => {
+  try {
+    const user = await Models.User.findById( userId )
+      .select( 'moviesLoved name' )
+      .populate( {
+        path: 'moviesLoved',
+        options: {
+          limit: 5,
+        },
+      } )
+
+    if ( user ) return res.json( user )
+    return next( DnE( userId ) )
+  } catch ( err ) { return next( err ) }
+} )
+
+/**
+ * Get 5 movies hated by a given user
+ */
+router.get( '/hated/:userId', async ( { params: { userId } }, res, next ) => {
+  try {
+    const user = await Models.User.findById( userId )
+      .select( 'moviesHates name' )
+      .populate( {
+        path: 'moviesHates',
+        options: {
+          limit: 5,
+        },
+      } )
+
+    if ( user ) return res.json( user )
+    return next( DnE( userId ) )
+  } catch ( err ) { return next( err ) }
+} )
+
+
 export default router

@@ -4,37 +4,33 @@ import React, { FC, useContext, useEffect } from 'react'
 import { Link, useParams } from '@reach/router'
 import useSWR, { mutate } from 'swr'
 import clsx from 'clsx'
+// @ts-expect-error missing types
+import title from 'title'
 
 import { PageProps } from '../lib/types'
 import Layout from '../components/Layout'
 import LinkButton from '../components/LinkButton'
 import { AuthContext, AUTH_ACTIONS, parseCookies } from '../lib/auth'
 
-const DummyContribData = () => (
-  <>
-    <div className="flex flex-col w-full mt-8 md:w-1/2 px-4">
-      <h3 className="text-xl text-center font-medium">Top 5 recent Likes</h3>
-      <div className="text-lg border-gray-400 border-2 rounded-lg flex flex-col">
-        <Link className="ml-2 py-2 hover:text-yellow-400" to="/movies/1">Toy Story</Link>
-        <Link className="ml-2 py-2 hover:text-yellow-400" to="/movies/10">GoldenEye</Link>
-        <Link className="ml-2 py-2 hover:text-yellow-400" to="/movies/7">Sabrina</Link>
-        <Link className="ml-2 py-2 hover:text-yellow-400" to="/movies/asdf">Anatomy Park</Link>
-        <Link className="ml-2 py-2 hover:text-yellow-400" to="/movies/515">Pilot</Link>
-      </div>
-    </div>
+type MovieListingBoxProps = {
+  label: string,
+  movies:[{_id: string, title: string}]
+}
 
-    <div className="flex flex-col w-full mt-8 md:w-1/2 px-4">
-      <h3 className="text-xl text-center font-medium">Top 5 recent Contributions</h3>
-      <div className="text-lg border-gray-400 border-2 rounded-lg flex flex-col">
-        <Link className="ml-2 py-2 hover:text-yellow-400" to="/movies/Anchor Gear">Anchor Gear</Link>
-        <Link className="ml-2 py-2 hover:text-yellow-400" to="/movies/Mortynight Run">Mortynight Run</Link>
-        <Link className="ml-2 py-2 hover:text-yellow-400" to="/movies/Close Rick-counters of the Rick Kind">Close Rick-counters of the Rick Kind</Link>
-        <Link className="ml-2 py-2 hover:text-yellow-400" to="/movies/Heat">Heat</Link>
-        <Link className="ml-2 py-2 hover:text-yellow-400" to="/movies/2">Jumanji</Link>
-      </div>
+const MovieListingBox = ( { label, movies }:MovieListingBoxProps ) => (
+  <div className="flex flex-col w-full mt-8 md:w-1/2 px-4">
+    <h3 className="text-xl text-center font-medium">{label}</h3>
+    <div className="text-lg border-gray-400 border-2 rounded-lg flex flex-col">
+      {movies.map( ( { _id: id, title } ) => (
+        <Link
+          className="ml-2 py-2 hover:text-yellow-400"
+          key={id}
+          to={`/movies/${id}`}
+        >{title}
+        </Link>
+      ) )}
     </div>
-  </>
-
+  </div>
 )
 
 type UserProfileDataProps = {
@@ -44,10 +40,8 @@ type UserProfileDataProps = {
 
 const UserDataFetch = ( { name, userRole }: UserProfileDataProps ) => (
   <div className="flex justify-around mt-8">
-    <img className="rounded-full h-56" src="https://via.placeholder.com/300" alt="Dummy Profile Pic" />
-
     <div className=" my-auto">
-      <h1 className="text-4xl font-medium">{name}</h1>
+      <h1 className="text-4xl font-medium">{title( name )}</h1>
       <h3 className="text-lg">Role: {userRole}</h3>
     </div>
   </div>
@@ -91,9 +85,9 @@ const ProfileEditOptions = () => {
     } )
 
     const cookies = parseCookies()
-    // @ts-expect-error
+    // @ts-expect-error too much work to get types
     const refreshToken = cookies[ 'refresh-token' ]
-    // @ts-expect-error
+    // @ts-expect-error too much work to get types
     const accessToken = cookies[ 'access-token' ]
     fetch( '/api/users/token/update', {
       method: 'POST',
@@ -120,6 +114,8 @@ const ProfileEditOptions = () => {
 const UserProfile: FC<PageProps> = () => {
   const { userId } = useParams()
   const { data } = useSWR( `/api/users/${userId}` )
+  const { data: loved } = useSWR( data && `/api/users/liked/${userId}` )
+  const { data: hated } = useSWR( data && `/api/users/hated/${userId}` )
   const { state: { isAuthenticated, role } } = useContext( AuthContext )
 
   useEffect( () => {
@@ -134,7 +130,8 @@ const UserProfile: FC<PageProps> = () => {
       <>
         <UserDataFetch name={data.name} userRole={data.role} />
         <div className="flex flex-col md:flex-row justify-around">
-          <DummyContribData />
+          { loved && loved.moviesLoved.length > 0 && <MovieListingBox label="Recently Likes" movies={loved.moviesLoved} />}
+          { hated && hated.moviesHates.length > 0 && <MovieListingBox label="Recently Disliked" movies={hated.moviesHates} />}
         </div>
         <div className="flex flex-col md:flex-row justify-around">
           {isAuthenticated && <ProfileEditOptions />}
