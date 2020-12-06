@@ -1,45 +1,16 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { FC, useState, useEffect, useRef } from 'react'
-import { Link, navigate } from '@reach/router'
-import cx from 'clsx'
+import { navigate } from '@reach/router'
 import useSwr from 'swr'
 
 import { PageProps } from '../../lib/types'
 import Layout from '../../components/Layout'
 import useQuery from '../../hooks/use-query'
-
-type UserCardProps = {
-  name: string
-  userId: string
-}
-
-const UserCard = ( { userId, name }: UserCardProps ) => (
-  <div className="p-2 md:w-1/3">
-
-    <Link to={userId}>
-
-      <div
-        className={cx(
-          'h-full overflow-hidden mx-auto',
-          'border-gray-100 border-2 rounded-lg hover:border-yellow-400',
-          'lg:w-11/12 md:w-full w-2/3',
-        )}
-      >
-        <div style={{ height: 'inherit' }} className="flex flex-col justify-between">
-
-          <h1 className="text-3xl font-bold text-center">{name}</h1>
-
-        </div>
-      </div>
-
-    </Link>
-
-  </div>
-)
+import UserCard from '../../components/UserCard'
 
 const Listings: FC<PageProps> = () => {
-  const offset = useState( useQuery( 'offset' ) || 0 )
+  const offset = useState( useQuery( 'offset' ) || 20 )
   const queryString = useRef( '/api/people?limit=48' )
   const [ mounted, setMounted ] = useState( false )
 
@@ -63,7 +34,7 @@ const Listings: FC<PageProps> = () => {
           <div className="md:flex md:flex-wrap">
             {/* @ts-expect-error */}
             {data.results.map( ( { _id: id, name } ) => (
-              <UserCard key={id} userId={id} name={name} />
+              <UserCard key={id} to={id} name={name} />
             ) )}
           </div>
 
