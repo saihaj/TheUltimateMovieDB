@@ -25,6 +25,8 @@ router.get( '/:movie', async ( { params: { movie } }, res, next ) => {
  * For Return type of object see `MovieRatingSchema`
  */
 router.patch( '/upvote/:movie', async ( { params: { movie }, body }, res, next ) => {
+  if ( !body.user ) return next( { message: '`user` is a required field.', status: 412 } );
+
   try {
     const movieObj = await GetItemById( Models.MovieModel, movie )
     if ( movieObj ) {
@@ -90,9 +92,7 @@ router.patch( '/upvote/:movie', async ( { params: { movie }, body }, res, next )
         { $push: { moviesLoved: movieObj._id } },
       ).exec()
 
-      const vote = await Models.MovieRatingsModel.findById( { _id: rateMe._id } )
-
-      return res.json( vote )
+      return res.json( { message: `Thanks for liking ${movieObj.title}` } )
     }
     return next( DnE( movie ) );
   } catch ( err ) { return next( err ) }
@@ -103,6 +103,8 @@ router.patch( '/upvote/:movie', async ( { params: { movie }, body }, res, next )
  * For Return type of object see `MovieRatingSchema`
  */
 router.patch( '/downvote/:movie', async ( { params: { movie }, body }, res, next ) => {
+  if ( !body.user ) return next( { message: '`user` is a required field.', status: 412 } );
+
   try {
     const movieObj = await GetItemById( Models.MovieModel, movie )
     if ( movieObj ) {
@@ -168,9 +170,7 @@ router.patch( '/downvote/:movie', async ( { params: { movie }, body }, res, next
         { $push: { moviesHates: movieObj._id } },
       ).exec()
 
-      const vote = await Models.MovieRatingsModel.findById( { _id: rateMe._id } )
-
-      return res.json( vote )
+      return res.json( { message: `We hope you find peace after disliking ${movieObj.title}` } )
     }
     return next( DnE( movie ) );
   } catch ( err ) { return next( err ) }

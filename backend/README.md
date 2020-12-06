@@ -173,10 +173,10 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
   - `/rating`
     - `/upvote/:movie`
       - Upvote a movie
-      - Returns [movie rating schema](./src/models/movie.ts) or message if already voted
+      - Returns a message
     - `/downvote/:movie`
       - Downvote a movie
-      - Returns [movie rating schema](./src/models/movie.ts) or message if already voted
+      - Returns a message
   - `/score/:movie`
     - Send the new score in payload
     - Returns the new average score
