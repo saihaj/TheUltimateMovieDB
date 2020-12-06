@@ -1,5 +1,6 @@
 import React, { Suspense, lazy, useReducer, useEffect } from 'react'
 import { Router } from '@reach/router'
+import { ToastProvider } from 'react-toast-notifications'
 
 import { AuthContext, authReducer, initialAuthState, AUTH_ACTIONS, parseCookies } from './lib/auth'
 
@@ -55,7 +56,13 @@ const App = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <AuthContext.Provider value={{ state, dispatch }}>
-        <NavigationRoutes />
+        <ToastProvider
+          autoDismiss
+          autoDismissTimeout={3000}
+          placement="top-right"
+        >
+          <NavigationRoutes />
+        </ToastProvider>
       </AuthContext.Provider>
     </Suspense>
   )
