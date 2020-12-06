@@ -1,9 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { Router } from 'express';
-import { v4 } from 'uuid';
 
 import Models from '../../models';
-import dataset from '../../movie-data';
 import { NumChecking, EscapeRegex, GetItemById, DnE, NextOffset } from '../../utils/db';
 
 import Ratings from './ratings';
@@ -96,16 +94,108 @@ router.get( '/:movie', async ( { params: { movie } }, res, next ) => {
   }
 } );
 
-// Post a movie
-router.post( '/', ( { body }, res ) => {
-  const input = { id: v4(), ...body };
-  dataset.push( input );
-  res.status( 200 ).json( { message: 'Successfully added the movie' } );
+/**
+ * Add a new movie
+ * Returns newly added movie
+ * Required:
+ *    - title
+ *    - genre
+ *    - actors
+ *    - directors
+ *    - writers
+ *    - plot
+ *    - releaseDate
+ */
+router.post( '/', async ( { body }, res, next ) => {
+  try {
+    const validateTitle = await Models.MovieModel
+      .find( { title: body.title } )
+      .countDocuments() > 0;
+
+    if ( validateTitle ) return next( { message: `Movie with ${body.title} already exists`, status: 400 } );
+
+    const people = [ ...body.directors, ...body.actors, ...body.writers ];
+
+    const searchPeople = await Promise.all(
+      people.map( ( a ) => Models.People.findOne( { name: a } ).select( 'name followers' ) ),
+    );
+
+    if ( searchPeople.filter( Boolean ).length !== people.length ) {
+      return next( { message: 'Person does not exist in database. Add them and comeback.', status: 400 } );
+    }
+
+    const dirs = searchPeople.slice( 0, body.directors.length );
+
+    const actors = searchPeople.slice(
+      body.directors.length,
+      body.directors.length + body.actors.length,
+    );
+
+    const writers = searchPeople.slice(
+      body.directors.length + body.actors.length,
+      body.directors.length + body.actors.length + body.writers.length,
+    );
+
+    const newMovieMeta = await new Models.MovieMetaModel( {
+      plot: body.plot,
+      releaseDate: body.releaseDate,
+    } ).save()
+
+    const newMovie = new Models.MovieModel( {
+      ...body,
+      title: body.title,
+      genre: body.genre,
+      // @ts-ignore
+      directors: dirs.map( ( { _id: id } ) => id ),
+      // @ts-ignore
+      actors: actors.map( ( { _id: id } ) => id ),
+      // @ts-ignore
+      writers: writers.map( ( { _id: id } ) => id ),
+      meta: newMovieMeta._id,
+    } );
+
+    const saveMovie = await newMovie.save();
+
+    // Push the movie to all the directors
+    await Promise.all( dirs.map( async ( person ) => Models.People.findByIdAndUpdate(
+      // @ts-ignore
+      { _id: person._id },
+      { $push: { director: saveMovie._id } },
+    ) ) );
+
+    // Push the movie to all the actors
+    await Promise.all( actors.map( async ( person ) => Models.People.findByIdAndUpdate(
+      // @ts-ignore
+      { _id: person._id },
+      { $push: { actor: saveMovie._id } },
+    ) ) );
+
+    // Push the movie to all the writers
+    await Promise.all( writers.map( async ( person ) => Models.People.findByIdAndUpdate(
+      // @ts-ignore
+      { _id: person._id },
+      { $push: { writer: saveMovie._id } },
+    ) ) );
+
+    // Notify all followers
+    await Promise.all(
+      searchPeople.map( ( {
+        // @ts-ignore
+        name, followers,
+      } ) => followers.map( async ( id:string ) => new Models.Notifications( {
+        to: id,
+        // @ts-ignore
+        message: `${name} took part in ${saveMovie.title}`,
+        movie: saveMovie._id,
+      } ).save() ) ),
+    );
+
+    return res.status( 200 ).json( newMovie );
+  } catch ( err ) { return next( err ); }
 } );
 
 /**
  * Score a movie
- * For Return type of object see `MovieSchema`
  */
 router.patch(
   '/score/:movie',

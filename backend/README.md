@@ -100,16 +100,15 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
 
 - `movies`
   - `/`
-    - Returns a success message. You must specify the following fields.
+    - Returns newly added movie You must specify the following fields.
       - `title`
       - `genre`
       - `actors`
-      - `writer`
-      - `director`
-      - `year`
-      - `poster`
-      - `rated`
-      - `released`
+      - `directors`
+      - `writers`
+      - `plot`
+      - `releaseDate`
+
   - `/review/:movie`
     - Specify the following fields
       - `user`: ObjectID
