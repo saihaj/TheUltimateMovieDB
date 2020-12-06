@@ -90,6 +90,12 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
     - Returns array of reviews. Only name of user is sent. See [movie review schema](./src/models/movie.ts).
   - `/rating/:movie`
     - Returns array of reviews. See [movie rating schema](./src/models/movie.ts).
+
+- `notifications`
+  - `:userId`
+    - Get all notifications for given user id
+    - Returns an array of notifications. See [notifications schema](./src/models/notifications.ts).
+
 ### POST
 
 - `movies`
@@ -184,3 +190,9 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
   - `/score/:movie`
     - Send the new score in payload
     - Returns the new average score
+
+### DELETE
+- `notifications`
+  - `/read/:notificationId`
+    - Mark a notification as read
+    - Returns a success/failure message.
