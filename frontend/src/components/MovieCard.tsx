@@ -27,7 +27,7 @@ const MovieCard = ( {
   releaseDate,
 }: MovieCardProps ) => (
   <div className="p-2 md:w-1/3">
-    <Link to={movieId}>
+    <Link to={`/movies/${movieId}`}>
       <div
         className={cx(
           'h-full overflow-hidden mx-auto',
