@@ -146,42 +146,35 @@ router.get( '/following/:userId', async ( { params: { userId } }, res, next ) =>
 } )
 
 /**
- * Get 5 movies liked by a given user
+ * Get 5 movies recently liked by a given user
  */
 router.get( '/liked/:userId', async ( { params: { userId } }, res, next ) => {
   try {
     const user = await Models.User.findById( userId )
       .select( 'moviesLoved name' )
-      .populate( {
-        path: 'moviesLoved',
-        options: {
-          limit: 5,
-        },
-      } )
+      .slice( 'moviesLoved', -5 )
+      .populate( 'moviesLoved' )
 
-    if ( user ) return res.json( user )
+    // @ts-expect-error missing strong typings
+    if ( user ) return res.json( { ...user.toJSON(), moviesLoved: user.moviesLoved.reverse() } )
     return next( DnE( userId ) )
   } catch ( err ) { return next( err ) }
 } )
 
 /**
- * Get 5 movies hated by a given user
+ * Get 5 movies recently hated by a given user
  */
 router.get( '/hated/:userId', async ( { params: { userId } }, res, next ) => {
   try {
     const user = await Models.User.findById( userId )
       .select( 'moviesHates name' )
-      .populate( {
-        path: 'moviesHates',
-        options: {
-          limit: 5,
-        },
-      } )
+      .slice( 'moviesHates', -5 )
+      .populate( 'moviesHates' )
 
-    if ( user ) return res.json( user )
+    // @ts-expect-error missing strong typings
+    if ( user ) return res.json( { ...user.toJSON(), moviesHates: user.moviesHates.reverse() } )
     return next( DnE( userId ) )
   } catch ( err ) { return next( err ) }
 } )
-
 
 export default router

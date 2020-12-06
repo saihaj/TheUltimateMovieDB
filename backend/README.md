@@ -164,9 +164,9 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
       - Required Fields
         - `personId`: Person to unfollow
   - `/liked/:movie`
-    - Returns 5 movies loved by user
+    - Returns 5 movies recently loved by user
   - `/hated/:movie`
-    - Returns 5 movies hated by user
+    - Returns 5 movies recently hated by user
 ### PATCH
 
 - `users`
