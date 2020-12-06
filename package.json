@@ -17,7 +17,7 @@
     "start:frontend": "cd frontend && npm start",
     "start:backend": "cd backend && npm start",
     "start": "run-p -l start:*",
-    "start:db": "cd backend && npm run start:mongo",
+    "db": "cd backend && npm run start:mongo",
     "stop:db": "cd backend && npm run stop:mongo",
     "dev:frontend": "cd frontend && npm run dev",
     "dev:backend": "cd backend && npm run dev",
