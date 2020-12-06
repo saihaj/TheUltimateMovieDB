@@ -65,7 +65,7 @@ router.get( '/:personId', async ( { params: { personId } }, res, next ) => {
         .map( ( id ) => moviesSet.add( id.toString() ) )
 
       const tempMovies = await Promise.all(
-        [ ...moviesSet ].map( async ( id ) => Models.MovieModel.findById( id ).populate( 'directors' ) ),
+        [ ...moviesSet ].map( async ( id ) => Models.MovieModel.findById( id ).populate( 'directors meta' ) ),
       )
 
       return res.json( { name: person.name, movies: tempMovies, _id: person._id } )
