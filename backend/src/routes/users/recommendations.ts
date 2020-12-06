@@ -50,11 +50,13 @@ router.get( '/:userId', async ( { params: { userId } }, res, next ) => {
       // removed all movies hated
       user.moviesHates.map( ( movie:any ) => setOfMovies.delete( movie.toString() ) );
 
-      // randomize movies and then select 20 for performance reasons
+      // randomize movies and then select 9 for performance reasons
       const movies = await Promise.all(
         shuffle( [ ...setOfMovies ] )
-          .slice( 0, 20 )
-          .map( ( movieId:any ) => Models.MovieModel.findById( movieId ).populate( 'directors', 'name' ) ),
+          .slice( 0, 9 )
+          .map( ( movieId:any ) => Models.MovieModel
+            .findById( movieId )
+            .populate( 'directors meta', 'name releaseDate' ) ),
       );
 
       return res.json( movies )

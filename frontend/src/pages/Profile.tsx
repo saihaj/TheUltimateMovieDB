@@ -1,7 +1,7 @@
+/* eslint-disable no-underscore-dangle */
 import React, { FC, useContext, useEffect } from 'react'
 import { Link, useParams } from '@reach/router'
 import useSWR, { mutate } from 'swr'
-import clsx from 'clsx'
 // @ts-expect-error missing types
 import title from 'title'
 import { useToasts } from 'react-toast-notifications'
@@ -11,6 +11,7 @@ import Layout from '../components/Layout'
 import LinkButton from '../components/LinkButton'
 import { AuthContext, AUTH_ACTIONS, parseCookies } from '../lib/auth'
 import ActionButton from '../components/ProfileActionButton'
+import MovieCard, { MovieCardProps } from '../components/MovieCard'
 
 type MovieListingBoxProps = {
   label: string,
@@ -128,6 +129,7 @@ const UserProfile: FC<PageProps> = () => {
   const { data: loved } = useSWR( data && `/api/users/liked/${userId}` )
   const { data: hated } = useSWR( data && `/api/users/hated/${userId}` )
   const { state: { isAuthenticated, role, userId: loggedInUserId } } = useContext( AuthContext )
+  const { data: recommended } = useSWR( data && `/api/users/recommendations/${userId}` )
 
   useEffect( () => {
     mutate( `/api/users/${userId}` )
@@ -167,8 +169,37 @@ const UserProfile: FC<PageProps> = () => {
           )}
         </div>
 
+        <div className="pt-4 pb-4">
+          <h2 className="text-center text-3xl font-semibold">
+            Recommended for {loggedInUserId === userId ? 'you' : title( data.name )}
+          </h2>
+          {recommended && recommended.length > 0 && (
+            <div className="md:flex md:flex-wrap">
+              {recommended.map(
+                ( a: {
+              _id: MovieCardProps['movieId'];
+              title: MovieCardProps['title'];
+              poster: MovieCardProps['posterUrl'];
+              directors: MovieCardProps['director'];
+              meta: { releaseDate: MovieCardProps['releaseDate'] };
+            } ) => (
+              <MovieCard
+                key={a._id}
+                movieId={a._id}
+                title={a.title}
+                posterUrl={a.poster}
+                director={a.directors}
+                releaseDate={a.meta.releaseDate}
+              />
+                ),
+              )}
+            </div>
+          )}
+        </div>
+
       </>
       )}
+
     </Layout>
   )
 }
