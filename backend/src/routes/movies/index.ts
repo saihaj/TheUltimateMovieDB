@@ -95,6 +95,34 @@ router.get( '/:movie', async ( { params: { movie } }, res, next ) => {
 } );
 
 /**
+ * Get similar movies given a movie ID
+ * For Return type of object see [`MovieSchema`]
+ */
+router.get( '/:movie/similar', async ( { params: { movie } }, res, next ) => {
+  try {
+    const movieObj = await GetItemById( Models.MovieModel, movie );
+    const movieCount = await Models.MovieModel.countDocuments()
+
+    if ( movieObj ) {
+      const movies:any = []
+      await Promise.all(
+        movieObj.genre.map( ( word:any ) => Models.MovieModel
+          .find( { genre: word } )
+          .populate( 'meta' )
+          .limit( 3 )
+          .skip( Math.floor( Math.random() * ( movieCount - movieCount / 2 ) ) ) ),
+      ).then( ( m ) => m.map( ( a:any ) => a.map( ( x:any ) => movies.push( x ) ) ) )
+
+      return res.json( movies );
+    }
+
+    return next( DnE( movie ) );
+  } catch ( err ) {
+    return next( err );
+  }
+} );
+
+/**
  * Add a new movie
  * Returns newly added movie
  * Required:

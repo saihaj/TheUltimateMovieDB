@@ -12,6 +12,7 @@ import Layout from '../../components/Layout'
 import { AuthContext } from '../../lib/auth'
 import ActionButton from '../../components/ProfileActionButton'
 import MovieReview from '../../components/MovieReview'
+import MovieCard, { MovieCardProps } from '../../components/MovieCard'
 
 type PeopleNamesProps = {
   list: [{ _id: string; name: string }];
@@ -84,25 +85,27 @@ const WriteReview = () => {
   const [ review, setReview ] = useState( '' )
   const { movieId } = useParams()
   const { addToast } = useToasts()
-  const { state: { userId } } = useContext( AuthContext )
-
+  const {
+    state: { userId },
+  } = useContext( AuthContext )
   const submitReview = async () => {
     if ( review.length > 0 ) {
-      const res = await ( await fetch( `/api/movies/review/${movieId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify( {
-          comment: review,
-          user: userId,
-        } ),
-      } ) ).json()
+      const res = await (
+        await fetch( `/api/movies/review/${movieId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify( {
+            comment: review,
+            user: userId,
+          } ),
+        } )
+      ).json()
 
       setReview( '' )
       setGivenReview( true )
       mutate( `/api/movies/review/${movieId}` )
-
       addToast( res.error >= 400 ? res.message : 'Thanks for the review!', {
         appearance: res.error >= 400 ? 'error' : 'info',
         autoDismiss: true,
@@ -122,19 +125,19 @@ const WriteReview = () => {
         </h3>
       )}
       {!givenReview && (
-      <>
-        <textarea
-          placeholder="Write review"
-          value={review}
-          onChange={e => setReview( e.target.value )}
-          className="form-input mt-2 block w-full rounded-t-lg text-black bg-gray-400"
-        />
-        <ActionButton
-          label="Submit Review"
-          customStyle="rounded-t-none"
-          action={() => submitReview()}
-        />
-      </>
+        <>
+          <textarea
+            placeholder="Write review"
+            value={review}
+            onChange={e => setReview( e.target.value )}
+            className="form-input mt-2 block w-full rounded-t-lg text-black bg-gray-400"
+          />
+          <ActionButton
+            label="Submit Review"
+            customStyle="rounded-t-none"
+            action={() => submitReview()}
+          />
+        </>
       )}
     </div>
   )
@@ -176,7 +179,11 @@ const MovieComponent = ( {
           <br />
           <b>Genre: </b>
           <ReactJoin separator={<span>, </span>}>
-            {genre.map( a => <Link className="hover:text-yellow-400" to={`/movies?genre=${a}`}>{a}</Link> )}
+            {genre.map( a => (
+              <Link className="hover:text-yellow-400" to={`/movies?genre=${a}`}>
+                {a}
+              </Link>
+            ) )}
           </ReactJoin>
         </h3>
       </div>
@@ -187,20 +194,27 @@ const MovieComponent = ( {
 const MovieView: FC<PageProps> = () => {
   const { movieId } = useParams()
   const { data, error } = useSWR( `/api/movies/${movieId}` )
-  const { state: { isAuthenticated } } = useContext( AuthContext )
+  const {
+    state: { isAuthenticated },
+  } = useContext( AuthContext )
   const { data: reviewsData } = useSWR( `/api/movies/review/${movieId}` )
+  const { data: similarMovies } = useSWR(
+    data && `/api/movies/${movieId}/similar`,
+  )
 
-  const setReview = async ( score:number ) => {
+  const setReview = async ( score: number ) => {
     if ( isAuthenticated ) {
-      await ( await fetch( `/api/movies/score/${movieId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify( {
-          score,
-        } ),
-      } ) ).json()
+      await (
+        await fetch( `/api/movies/score/${movieId}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify( {
+            score,
+          } ),
+        } )
+      ).json()
     }
   }
 
@@ -208,9 +222,9 @@ const MovieView: FC<PageProps> = () => {
     <Layout nav>
       {!error && !data && <div>Loading...</div>}
       {error && (
-      <h1 className="text-center text-3xl pt-16">
-        We have a problem! Movie not found
-      </h1>
+        <h1 className="text-center text-3xl pt-16">
+          We have a problem! Movie not found
+        </h1>
       )}
 
       {data && (
@@ -247,18 +261,51 @@ const MovieView: FC<PageProps> = () => {
               <>
                 <h2 className="text-3xl pb-2 text-center">User Reviews</h2>
                 <div className="overflow-y-scroll h-48">
-                  {reviewsData.map( ( a:{
-                    _id: string;
-                    comment: string,
-                    user:{_id:string, name:string}
-                } ) => (
-                  <MovieReview key={a._id} comment={a.comment} user={a.user} />
-                  ) )}
+                  {reviewsData.map(
+                    ( a: {
+                      _id: string;
+                      comment: string;
+                      user: { _id: string; name: string };
+                    } ) => (
+                      <MovieReview
+                        key={a._id}
+                        comment={a.comment}
+                        user={a.user}
+                      />
+                    ),
+                  )}
                 </div>
               </>
             )}
           </div>
 
+          <div className="pt-10 pb-4">
+            {similarMovies && similarMovies.length > 0 && (
+              <>
+                <h2 className="text-3xl pb-2 text-center">Similar Movies</h2>
+                <div className="md:flex md:flex-wrap">
+                  {similarMovies.map(
+                    ( a: {
+                      _id: MovieCardProps['movieId'];
+                      title: MovieCardProps['title'];
+                      poster: MovieCardProps['posterUrl'];
+                      directors: MovieCardProps['director'];
+                      meta: { releaseDate: MovieCardProps['releaseDate'] };
+                    } ) => (
+                      <MovieCard
+                        key={a._id}
+                        movieId={a._id}
+                        title={a.title}
+                        posterUrl={a.poster}
+                        director={a.directors}
+                        releaseDate={a.meta.releaseDate}
+                      />
+                    ),
+                  )}
+                </div>
+              </>
+            )}
+          </div>
         </>
       )}
     </Layout>

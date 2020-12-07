@@ -88,6 +88,8 @@ I did setup mongo schema for all the routes see [`models`](./src/models/index.ts
     - Movies are returned in ascending order as in DB
   - `/:movie`
     - Returns a movie
+    - `/similar`
+      - Returns similar movies 
   - `/reviews/:movie`
     - Returns array of reviews. Only name of user is sent. See [movie review schema](./src/models/movie.ts).
   - `/rating/:movie`
