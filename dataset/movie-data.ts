@@ -1,1 +1,1 @@
-/Users/saihajpreetsingh/Desktop/COMP2406-project/backend/src/movie-data.ts
+../backend/src/movie-data.ts
