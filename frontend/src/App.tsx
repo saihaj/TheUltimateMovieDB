@@ -14,6 +14,7 @@ const UserMePage = lazy( () => import( './pages/Me' ) )
 const People = lazy( () => import( './pages/Users' ) )
 const Followers = lazy( () => import( './pages/Followers' ) )
 const Following = lazy( () => import( './pages/Following' ) )
+const NotificationWrapper = lazy( () => import( './components/NotificationWrapper' ) )
 
 /**
  * Setup Top-Level Routes for @reach/router
@@ -41,7 +42,7 @@ const App = () => {
 
   useEffect( () => {
     const cookies = parseCookies()
-    // @ts-expect-error
+    // @ts-expect-error too much work to get these type to work
     const refreshToken = cookies[ 'refresh-token' ]
 
     fetch( '/api/users/token', {
@@ -65,7 +66,9 @@ const App = () => {
           autoDismissTimeout={3000}
           placement="top-right"
         >
-          <NavigationRoutes />
+          <NotificationWrapper>
+            <NavigationRoutes />
+          </NotificationWrapper>
         </ToastProvider>
       </AuthContext.Provider>
     </Suspense>
