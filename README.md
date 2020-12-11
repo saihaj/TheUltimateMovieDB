@@ -1,9 +1,6 @@
 # COMP2406 Movie DB Project
 
-Authors of this project:
-- Co-author: **Saihajpreet Singh** (101150058)
-
-~~- Co-author: **Mihir Gupta** (101172281)~~ (No longer partner as of November 11,2020)
+See [REPORT.md](REPORT.md) for summary of all functionality and things that can be improved.
 
 Since this top-level README is for describing higher level things for project. We suggest that you also checkout the readme in dirs if you encounter any project specific issues. are some issues when you using them. There shouldn't be any issues since its very simple but who knows. We try to keep notes and important instructions in related dirs to make it easy. We assume that you have working using NodeJS v12.x and NPM installed on your machine.
 

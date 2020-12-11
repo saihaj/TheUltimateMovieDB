@@ -1,7 +1,4 @@
 # COMP2406 Final Report
-
-**Saihajpreet Singh** (101150058)
-
 ## Table of Contents
 
 - [COMP2406 Final Report](#comp2406-final-report)
@@ -30,7 +27,6 @@
 Project is deployed on [OpenStack](https://carleton.ca/scs/tech-support/scs-open-stack/). The public IP address for my instance is `134.117.128.78`
 
 - `ssh student@134.117.128.78`
-  - password: `student`
 - Once you are logged in then `cd TheUltimateMovieDB`
   - I have installed all the dependencies but if something seems to fail please run `npm install`
   - Database should also be running but if it is not please run `cd backend && sudo npm run start:mongo && cd ..`
